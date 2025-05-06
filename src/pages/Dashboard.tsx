@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -7,31 +6,23 @@ import { Input } from "@/components/ui/input";
 import { Mic, Play, Brain, MessageSquare, Bell, Calendar, Settings, Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
+interface Memory {
+  id: number;
+  type: 'reminder' | 'note' | 'conversation';
+  content: string;
+  timestamp: string;
+}
+
 const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [voiceCommand, setVoiceCommand] = useState("");
   const [isRecording, setIsRecording] = useState(false);
-  const [memories, setMemories] = useState([
-    {
-      id: 1,
-      type: "reminder",
-      content: "Call Rohan at 4 PM tomorrow",
-      timestamp: "Tomorrow, 4:00 PM",
-    },
-    {
-      id: 2,
-      type: "note",
-      content: "Working on a startup idea called BrainFuel",
-      timestamp: "Added 3 days ago",
-    },
-    {
-      id: 3, 
-      type: "conversation",
-      content: "Meeting with Ravi about Q4 planning",
-      timestamp: "Today, 10:30 AM",
-    }
-  ]);
+  const [memories, setMemories] = useState<Memory[]>([]);
+  const [activeTab, setActiveTab] = useState<'recent' | 'reminders' | 'notes' | 'conversations'>('recent');
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -58,6 +49,35 @@ const Dashboard = () => {
       subscription.unsubscribe();
     };
   }, [navigate]);
+
+  const fetchMemories = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('memories')
+        .select('*')
+        .eq(activeTab !== 'recent' ? 'type' : '', activeTab)
+        .range((page - 1) * 10, page * 10 - 1)
+        .order('created_at', { ascending: false });
+
+      if (data) {
+        if (page === 1) {
+          setMemories(data);
+        } else {
+          setMemories([...memories, ...data]);
+        }
+        setHasMore(data.length === 10);
+      }
+    } catch (error) {
+      console.error('Error fetching memories:', error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setPage(1);
+    fetchMemories();
+  }, [activeTab]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -167,18 +187,19 @@ const Dashboard = () => {
           {/* Memory Tabs */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="flex border-b border-gray-200">
-              <button className="px-6 py-3 text-sm font-medium text-brainai-electric-blue border-b-2 border-brainai-electric-blue">
-                Recent Memories
-              </button>
-              <button className="px-6 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">
-                Reminders
-              </button>
-              <button className="px-6 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">
-                Notes
-              </button>
-              <button className="px-6 py-3 text-sm font-medium text-gray-500 hover:text-gray-700">
-                Conversations
-              </button>
+              {['recent', 'reminders', 'notes', 'conversations'].map((tab) => (
+                <button
+                  key={tab}
+                  className={`px-6 py-3 text-sm font-medium ${
+                    activeTab === tab
+                      ? 'text-brainai-electric-blue border-b-2 border-brainai-electric-blue'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                  onClick={() => setActiveTab(tab as typeof activeTab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
             </div>
             
             <div className="p-6">
@@ -198,10 +219,26 @@ const Dashboard = () => {
                 ))}
               </div>
               
-              <Button variant="outline" className="w-full mt-6">
-                <Plus size={16} className="mr-2" />
-                Load More Memories
-              </Button>
+              {hasMore && (
+                <Button
+                  variant="outline"
+                  className="w-full mt-6"
+                  onClick={() => {
+                    setPage(page + 1);
+                    fetchMemories();
+                  }}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    'Loading...'
+                  ) : (
+                    <>
+                      <Plus size={16} className="mr-2" />
+                      Load More Memories
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </div>
