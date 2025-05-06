@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Link } from "react-router-dom";
+import home from "brainai-nexus-web/public/images/home.png";
 
 const HeroSection = () => {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation();
@@ -54,7 +55,7 @@ const HeroSection = () => {
           <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-brainai-neon-purple rounded-full opacity-70 animate-float" style={{ animationDelay: "1.5s" }}></div>
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 shadow-xl">
             <img 
-              src="brainai-nexus-web/public/images/home.png"
+              src={home}
               alt="BrainAi Interface" 
               className="w-full h-auto rounded-2xl" 
             />
