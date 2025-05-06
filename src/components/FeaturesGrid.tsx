@@ -1,6 +1,6 @@
 
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Headphones, Brain, MessageCircle, Bell } from "lucide-react";
+import { Mic, Brain, MessageSquare, Bell, Calendar, Clock, Zap, User, Check, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface FeatureCardProps {
@@ -40,28 +40,52 @@ const FeaturesGrid = () => {
   
   const features = [
     {
-      icon: <Headphones size={42} />,
-      title: "Personalize your space",
-      description: "Control BrainAi with voice commands while focusing on what matters most. Perfect for multitasking.",
+      icon: <Mic size={42} />,
+      title: "Voice Memory Capture",
+      description: "Speak and let BrainAi remember for you. Just say what you need to remember, and BrainAi stores it.",
       bgColor: "bg-pink-600"
     },
     {
       icon: <Brain size={42} />,
-      title: "Your home screen, now with friends",
-      description: "Store information in a structured vector database that understands context and relationships.",
+      title: "Vector Memory Storage",
+      description: "Every conversation, reminder, and thought is stored intelligently in a vector database for easy retrieval.",
       bgColor: "bg-amber-500"
     },
     {
-      icon: <MessageCircle size={42} />,
-      title: "Available magnets",
-      description: "Automatically create concise summaries of meetings, calls, and important conversations.",
+      icon: <MessageSquare size={42} />,
+      title: "Conversation Summarizer",
+      description: "Turn long discussions or voice notes into bite-sized summaries with key points and decisions.",
       bgColor: "bg-indigo-600"
     },
     {
       icon: <Bell size={42} />,
-      title: "Frequently asked questions",
-      description: "Receive intelligent notifications based on your schedule, location, and historical patterns.",
+      title: "Smart Reminders",
+      description: "BrainAi doesn't just remind you—it reminds you when it matters, with emotion-aware timing.",
       bgColor: "bg-green-600"
+    },
+    {
+      icon: <Calendar size={42} />,
+      title: "Routine Builder",
+      description: "Automate repetitive tasks and mental checklists. BrainAi guides you through your daily routines.",
+      bgColor: "bg-blue-600"
+    },
+    {
+      icon: <Zap size={42} />,
+      title: "Natural Language Commands",
+      description: "No buttons, just conversations. Simply tell BrainAi what you need in natural language.",
+      bgColor: "bg-purple-600"
+    },
+    {
+      icon: <User size={42} />,
+      title: "Mood-aware Feedback",
+      description: "BrainAi adapts to your tone and responses, offering personalized support when you need it most.",
+      bgColor: "bg-rose-600"
+    },
+    {
+      icon: <Lock size={42} />,
+      title: "Privacy-first Design",
+      description: "Your memory stays yours – secure and encrypted. Voice logs can be auto-deleted after 7 days.",
+      bgColor: "bg-teal-600"
     }
   ];
 
@@ -72,7 +96,7 @@ const FeaturesGrid = () => {
           ref={ref} 
           className={`text-center mb-16 opacity-0 ${isVisible ? 'animate-fade-in-up' : ''}`}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Have Fun!</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Powerful Features</h2>
           <p className="text-white/70 max-w-2xl mx-auto">Intelligence that adapts to your unique needs.</p>
         </div>
         

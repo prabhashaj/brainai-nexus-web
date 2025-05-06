@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation();
@@ -39,11 +40,13 @@ const HeroSection = () => {
           className={`opacity-0 ${ctaVisible ? 'animate-fade-in-up' : ''}`}
           style={{ animationDelay: '0.4s' }}
         >
-          <Button 
-            className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1"
-          >
-            Get started for free
-          </Button>
+          <Link to="/auth">
+            <Button 
+              className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1"
+            >
+              Get started for free
+            </Button>
+          </Link>
         </div>
 
         {/* Abstract UI Screenshot */}

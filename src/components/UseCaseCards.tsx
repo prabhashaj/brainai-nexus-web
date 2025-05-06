@@ -1,17 +1,18 @@
 
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useState } from "react";
-import { Headphones, Calendar, MessageSquare, Clock, Headphones as Audio, Brain, Sparkles } from "lucide-react";
+import { Mic, Calendar, MessageSquare, Clock, Headphones, Brain, Sparkles } from "lucide-react";
 
 interface UseCaseCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
+  example: string;
   colorClass: string;
   delay: number;
 }
 
-const UseCaseCard = ({ icon, title, description, colorClass, delay }: UseCaseCardProps) => {
+const UseCaseCard = ({ icon, title, description, example, colorClass, delay }: UseCaseCardProps) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
   
   return (
@@ -26,7 +27,11 @@ const UseCaseCard = ({ icon, title, description, colorClass, delay }: UseCaseCar
         </div>
         <div>
           <h3 className="text-xl font-bold mb-2">{title}</h3>
-          <p className="text-white/90 text-sm leading-relaxed">{description}</p>
+          <p className="text-white/90 text-sm leading-relaxed mb-3">{description}</p>
+          <div className="mt-4 bg-black/20 p-3 rounded text-white/80 text-xs italic">
+            <span className="font-medium text-white block mb-1">Example:</span>
+            {example}
+          </div>
         </div>
       </div>
     </div>
@@ -35,44 +40,49 @@ const UseCaseCard = ({ icon, title, description, colorClass, delay }: UseCaseCar
 
 const UseCaseCards = () => {
   const { ref, isVisible } = useScrollAnimation();
-  const [selectedCard, setSelectedCard] = useState(0);
   
   const useCases = [
     {
-      icon: <Audio size={20} />,
-      title: "Live audio with a tap",
-      description: "Speak your thoughts and BrainAi organizes them into searchable notes.",
+      icon: <Mic size={20} />,
+      title: "Voice Memory Capture",
+      description: "Speak and let BrainAi remember for you.",
+      example: 'Say "Remind me to call Rohan at 4 PM tomorrow" → BrainAi stores it with time and context.',
       colorClass: "bg-blue-500/20"
     },
     {
-      icon: <Calendar size={20} />,
-      title: "AI Calendar Organizer",
-      description: "Let BrainAi manage your schedule with smart time organization.",
+      icon: <Brain size={20} />,
+      title: "Contextual Recall",
+      description: "Ask anything, and BrainAi recalls it like a human assistant.",
+      example: 'You ask, "What did I plan with Rohan?" → BrainAi replies, "You planned a call with Rohan at 4 PM on Wednesday."',
       colorClass: "bg-amber-500/20"
     },
     {
-      icon: <Brain size={20} />,
-      title: "Interactive magnets with friends",
-      description: "Ask questions and get answers based on your past conversations.",
-      colorClass: "bg-indigo-500/20"
-    },
-    {
       icon: <MessageSquare size={20} />,
-      title: "Conversation Capture",
-      description: "Automatically summarize and store important meeting details.",
+      title: "Automated Conversation Summarizer",
+      description: "Turn long discussions into bite-sized summaries.",
+      example: 'You say, "Summarize my chat with Ravi from today" → BrainAi gives a clean summary with key points and decisions.',
       colorClass: "bg-green-500/20"
     },
     {
-      icon: <Sparkles size={20} />,
-      title: "A new way to have fun",
-      description: "View your life insights and productivity patterns at a glance.",
+      icon: <Calendar size={20} />,
+      title: "Smart Reminders",
+      description: "BrainAi doesn't just remind you—it reminds you when it matters.",
+      example: 'Say, "Remind me to wish Mom happy birthday when I wake up" → BrainAi sets a morning reminder with emotion-aware timing.',
       colorClass: "bg-rose-500/20"
     },
     {
       icon: <Clock size={20} />,
-      title: "Stay in the loop!",
-      description: "Schedule recurring tasks and let BrainAi handle the reminders.",
+      title: "Routine Builder",
+      description: "Automate repetitive tasks and mental checklists.",
+      example: 'You say, "Start my daily morning checklist" → BrainAi lists tasks like: 1) Drink water, 2) Meditate, 3) Review goals.',
       colorClass: "bg-purple-500/20"
+    },
+    {
+      icon: <Sparkles size={20} />,
+      title: "Natural Language Commands",
+      description: "No buttons, just conversations.",
+      example: 'Say, "Book a reminder every Friday to send weekly reports" → Done. No form-filling or typing.',
+      colorClass: "bg-indigo-500/20"
     }
   ];
 
@@ -96,6 +106,7 @@ const UseCaseCards = () => {
               icon={useCase.icon}
               title={useCase.title}
               description={useCase.description}
+              example={useCase.example}
               colorClass={useCase.colorClass}
               delay={100 * index}
             />
