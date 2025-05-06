@@ -43,24 +43,27 @@ const Testimonials = () => {
       role: "Product Manager",
       feedback:
         "BrainAi has been a game-changer for our team. It's easy to use and provides valuable insights.",
-      color: "bg-gradient-to-r from-pink-500 to-yellow-500",
-      hoverColor: "hover:bg-gradient-to-r hover:from-pink-600 hover:to-yellow-600",
+      color: "bg-brainai-electric-blue",
+      textColor: "text-black",
+      hoverColor: "hover:bg-brainai-electric-blue/90",
     },
     {
       name: "Jane Smith",
       role: "UX Designer",
       feedback:
         "The voice memory feature is fantastic! I can focus on my work without worrying about forgetting important details.",
-      color: "bg-gradient-to-r from-green-500 to-blue-500",
-      hoverColor: "hover:bg-gradient-to-r hover:from-green-600 hover:to-blue-600",
+      color: "bg-white",
+      textColor: "text-black",
+      hoverColor: "hover:bg-gray-200",
     },
     {
       name: "Bob Johnson",
       role: "Software Engineer",
       feedback:
         "I'm impressed with BrainAi's ability to understand and respond to my voice commands.",
-      color: "bg-gradient-to-r from-indigo-500 to-purple-500",
-      hoverColor: "hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600",
+      color: "bg-brainai-neon-purple",
+      textColor: "text-black",
+      hoverColor: "hover:bg-brainai-neon-purple/90",
     },
   ];
 
@@ -68,21 +71,23 @@ const Testimonials = () => {
     <section
       id="testimonials"
       ref={ref}
-      className={`section-padding text-white opacity-0 ${
+      className={`section-padding text-black opacity-0 ${
         isVisible ? "animate-fade-in-up" : ""
       }`}
     >
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-8">What Our Users Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <h2 className="text-5xl md:text-6xl font-extrabold mb-10" style={{ color: "white" }}>What Our Users Say</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className={`${testimonial.color} p-6 rounded-lg shadow-lg transition-colors ${testimonial.hoverColor}`}
+              className={`${testimonial.color} p-8 rounded-lg shadow-lg transition-transform transform hover:scale-105`}
             >
-              <p className="text-white/70 italic mb-4">"{testimonial.feedback}"</p>
-              <h4 className="text-xl font-bold">{testimonial.name}</h4>
-              <p className="text-sm text-white/50">{testimonial.role}</p>
+              <p className={`italic mb-6 text-lg md:text-xl font-medium ${testimonial.textColor}/80`}>
+                "{testimonial.feedback}"
+              </p>
+              <h4 className={`text-2xl font-bold ${testimonial.textColor}`}>{testimonial.name}</h4>
+              <p className={`text-lg ${testimonial.textColor}/60`}>{testimonial.role}</p>
             </div>
           ))}
         </div>
