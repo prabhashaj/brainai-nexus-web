@@ -54,7 +54,7 @@ const HeroSection = () => {
           <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-brainai-neon-purple rounded-full opacity-70 animate-float" style={{ animationDelay: "1.5s" }}></div>
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 shadow-xl">
             <img 
-              src="brainai-nexus-web/public/images/home.png"
+              src="/brainai-nexus-web/public/images/home.png"
               alt="BrainAi Interface" 
               className="w-full h-auto rounded-2xl" 
             />
