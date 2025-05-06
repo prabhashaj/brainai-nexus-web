@@ -34,7 +34,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple"></div>
+          <div className="h-8 w-8 rounded-full bg-brainai-electric-blue"></div>
           <span className="font-bold text-lg tracking-tight">BrainAi</span>
         </a>
 
@@ -54,9 +54,9 @@ const Navbar = () => {
         {/* CTA Button */}
         <div className="hidden md:block">
           <Button 
-            className="bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple hover:opacity-90 text-white"
+            className="bg-black hover:bg-black/80 text-white rounded-full"
           >
-            Get Started
+            Download App
           </Button>
         </div>
 
@@ -84,9 +84,9 @@ const Navbar = () => {
               </a>
             ))}
             <Button 
-              className="bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple hover:opacity-90 text-white w-full"
+              className="bg-black hover:bg-black/80 text-white w-full rounded-full"
             >
-              Get Started
+              Download App
             </Button>
           </div>
         </div>

@@ -6,62 +6,56 @@ const HeroSection = () => {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation();
   const { ref: subtitleRef, isVisible: subtitleVisible } = useScrollAnimation({ threshold: 0.2 });
   const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section className="min-h-screen flex items-center pt-24 pb-16 relative overflow-hidden">
+    <section className="min-h-[90vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-brainai-neon-purple/5 blur-[100px] rounded-full -z-10"></div>
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-brainai-electric-blue/5 blur-[100px] rounded-full -z-10"></div>
-
-      <div className="container mx-auto px-4 lg:flex lg:items-center lg:gap-12">
-        <div className="lg:w-1/2 space-y-8">
-          <div 
-            ref={titleRef} 
-            className={`opacity-0 ${titleVisible ? 'animate-fade-in-up' : ''}`}
-          >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-tight mb-4">
-              Your Second Brain.<br />
-              <span className="font-bold bg-gradient-to-r from-brainai-electric-blue via-brainai-neon-purple to-brainai-magenta bg-clip-text text-transparent">On Command.</span>
-            </h1>
-          </div>
-          
-          <div 
-            ref={subtitleRef} 
-            className={`opacity-0 ${subtitleVisible ? 'animate-fade-in-up' : ''}`}
-            style={{ animationDelay: '0.2s' }}
-          >
-            <p className="text-xl md:text-2xl font-light text-white/70 leading-relaxed">
-              Speak. BrainAi listens, remembers, and reminds you when you need it most.
-            </p>
-          </div>
-          
-          <div 
-            ref={ctaRef} 
-            className={`opacity-0 ${ctaVisible ? 'animate-fade-in-up' : ''}`}
-            style={{ animationDelay: '0.4s' }}
-          >
-            <Button 
-              className="bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple hover:opacity-90 text-white px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-brainai-electric-blue/20 transition-all duration-300 hover:-translate-y-1"
-            >
-              Get Started
-            </Button>
-          </div>
+      <div className="absolute top-20 right-20 w-16 h-16 bg-brainai-electric-blue rounded-full opacity-20 animate-float"></div>
+      <div className="absolute bottom-20 left-20 w-24 h-24 bg-brainai-neon-purple rounded-full opacity-20 animate-float" style={{ animationDelay: "1s" }}></div>
+      
+      <div className="container mx-auto px-4 text-center max-w-4xl">
+        <div 
+          ref={titleRef} 
+          className={`opacity-0 ${titleVisible ? 'animate-fade-in-up' : ''}`}
+        >
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight mb-4">
+            <span className="text-brainai-electric-blue">Your space</span><br />
+            <span className="text-brainai-neon-purple">Your memory</span>
+          </h1>
         </div>
         
         <div 
-          ref={imageRef} 
-          className={`lg:w-1/2 mt-12 lg:mt-0 opacity-0 ${imageVisible ? 'animate-fade-in-up' : ''}`}
-          style={{ animationDelay: '0.6s' }}
+          ref={subtitleRef} 
+          className={`opacity-0 ${subtitleVisible ? 'animate-fade-in-up' : ''}`}
+          style={{ animationDelay: '0.2s' }}
         >
-          <div className="glass p-4 border border-white/20 rounded-2xl overflow-hidden relative">
+          <p className="text-xl md:text-2xl font-light text-white/70 leading-relaxed mt-6 mb-10">
+            The best way to keep track of your thoughts
+          </p>
+        </div>
+        
+        <div 
+          ref={ctaRef} 
+          className={`opacity-0 ${ctaVisible ? 'animate-fade-in-up' : ''}`}
+          style={{ animationDelay: '0.4s' }}
+        >
+          <Button 
+            className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1"
+          >
+            Get started for free
+          </Button>
+        </div>
+
+        {/* Abstract UI Screenshot */}
+        <div className="mt-16 max-w-md mx-auto relative">
+          <div className="absolute -top-6 -left-6 w-12 h-12 bg-brainai-electric-blue rounded-full opacity-70 animate-float"></div>
+          <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-brainai-neon-purple rounded-full opacity-70 animate-float" style={{ animationDelay: "1.5s" }}></div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 shadow-xl">
             <img 
-              src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" 
+              src="public/lovable-uploads/0e4ed6b3-fc7d-4afe-be84-e2f9d560ccb1.png" 
               alt="BrainAi Interface" 
-              className="w-full h-auto rounded-lg" 
+              className="w-full h-auto rounded-2xl" 
             />
-            {/* Glass overlay effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none rounded-2xl"></div>
           </div>
         </div>
       </div>
