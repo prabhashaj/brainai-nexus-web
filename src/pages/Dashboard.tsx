@@ -1,249 +1,192 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Mic, Play, Brain, MessageSquare, Bell, Calendar, Settings, Plus } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Brain, Calendar, MessageSquare } from "lucide-react";
+import StatsCard from "@/components/dashboard/StatsCard";
+import RecentActivity from "@/components/dashboard/RecentActivity";
+import QuickActions from "@/components/dashboard/QuickActions";
+import VoiceCommandCard from "@/components/dashboard/VoiceCommandCard";
 
-interface Memory {
-  id: number;
-  type: 'reminder' | 'note' | 'conversation';
-  content: string;
-  timestamp: string;
+interface DashboardStats {
+  notes: number;
+  events: number;
+  conversations: number;
 }
 
 const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [voiceCommand, setVoiceCommand] = useState("");
-  const [isRecording, setIsRecording] = useState(false);
-  const [memories, setMemories] = useState<Memory[]>([]);
-  const [activeTab, setActiveTab] = useState<'recent' | 'reminders' | 'notes' | 'conversations'>('recent');
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const navigate = useNavigate();
+  const [stats, setStats] = useState<DashboardStats>({
+    notes: 0,
+    events: 0,
+    conversations: 0
+  });
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
+    const fetchUserAndData = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) return;
+
         setUser(session.user);
-      } else {
-        navigate("/auth");
+        await fetchStats(session.user.id);
+        await fetchRecentActivity(session.user.id);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load dashboard data",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
-    
-    checkUser();
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") {
-        navigate("/auth");
-      }
-    });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
+    fetchUserAndData();
+  }, []);
 
-  const fetchMemories = async () => {
-    setIsLoading(true);
+  const fetchStats = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('memories')
-        .select('*')
-        .eq(activeTab !== 'recent' ? 'type' : '', activeTab)
-        .range((page - 1) * 10, page * 10 - 1)
-        .order('created_at', { ascending: false });
+      // Get notes count
+      const { count: notesCount, error: notesError } = await supabase
+        .from('notes')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
 
-      if (data) {
-        if (page === 1) {
-          setMemories(data);
-        } else {
-          setMemories([...memories, ...data]);
-        }
-        setHasMore(data.length === 10);
-      }
-    } catch (error) {
-      console.error('Error fetching memories:', error);
-    }
-    setIsLoading(false);
-  };
+      // Get events count
+      const { count: eventsCount, error: eventsError } = await supabase
+        .from('events')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
 
-  useEffect(() => {
-    setPage(1);
-    fetchMemories();
-  }, [activeTab]);
+      // Get conversations count
+      const { count: conversationsCount, error: conversationsError } = await supabase
+        .from('conversations')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
-  const handleVoiceCommand = () => {
-    if (isRecording) {
-      // Simulate stopping recording
-      setIsRecording(false);
-      toast({
-        title: "Voice captured",
-        description: "Processing your request...",
+      setStats({
+        notes: notesCount || 0,
+        events: eventsCount || 0,
+        conversations: conversationsCount || 0
       });
-      
-      // Simulate processing delay
-      setTimeout(() => {
-        setMemories([
-          {
-            id: memories.length + 1,
-            type: "reminder",
-            content: voiceCommand,
-            timestamp: "Just now",
-          },
-          ...memories,
-        ]);
-        setVoiceCommand("");
-      }, 1500);
-    } else {
-      setIsRecording(true);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
     }
   };
 
-  const handleSubmitCommand = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!voiceCommand.trim()) return;
-    
-    setMemories([
-      {
-        id: memories.length + 1,
-        type: "note",
-        content: voiceCommand,
-        timestamp: "Just now",
-      },
-      ...memories,
-    ]);
-    setVoiceCommand("");
+  const fetchRecentActivity = async (userId: string) => {
+    try {
+      // Fetch recent notes
+      const { data: notes, error: notesError } = await supabase
+        .from('notes')
+        .select('id, title, created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(2);
+
+      // Fetch recent events
+      const { data: events, error: eventsError } = await supabase
+        .from('events')
+        .select('id, title, created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(2);
+
+      // Fetch recent conversations
+      const { data: conversations, error: conversationsError } = await supabase
+        .from('conversations')
+        .select('id, title, created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(2);
+
+      // Combine, transform and sort by date
+      const allActivity = [
+        ...(notes || []).map(item => ({
+          id: item.id,
+          type: 'note' as const,
+          title: item.title,
+          timestamp: new Date(item.created_at).toLocaleDateString()
+        })),
+        ...(events || []).map(item => ({
+          id: item.id,
+          type: 'event' as const,
+          title: item.title,
+          timestamp: new Date(item.created_at).toLocaleDateString()
+        })),
+        ...(conversations || []).map(item => ({
+          id: item.id,
+          type: 'conversation' as const,
+          title: item.title,
+          timestamp: new Date(item.created_at).toLocaleDateString()
+        }))
+      ].sort((a, b) => 
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      ).slice(0, 5);
+
+      setRecentActivity(allActivity);
+    } catch (error) {
+      console.error("Error fetching recent activity:", error);
+    }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-pulse text-brainai-electric-blue">Loading...</div>
+        <div className="animate-spin h-10 w-10 border-4 border-brainai-electric-blue border-t-transparent rounded-full"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 py-4">
-        <div className="container mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full bg-brainai-electric-blue"></div>
-            <span className="font-bold text-gray-800">BrainAi</span>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/settings")}>
-              <Settings size={18} />
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleSignOut}>
-              Sign Out
-            </Button>
-          </div>
+    <DashboardLayout>
+      <div className="animate-fade-in-up">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Dashboard</h1>
+        <p className="text-gray-600 mb-8">
+          Welcome back, {user?.user_metadata?.name || user?.email?.split('@')[0] || 'User'}! Here's an overview of your activity.
+        </p>
+        
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <StatsCard 
+            title="Notes" 
+            value={stats.notes} 
+            icon={<Brain className="h-6 w-6 text-blue-500" />}
+            className="bg-gradient-to-br from-blue-50 to-white"
+          />
+          <StatsCard 
+            title="Events" 
+            value={stats.events} 
+            icon={<Calendar className="h-6 w-6 text-amber-500" />}
+            className="bg-gradient-to-br from-amber-50 to-white"
+          />
+          <StatsCard 
+            title="Conversations" 
+            value={stats.conversations} 
+            icon={<MessageSquare className="h-6 w-6 text-green-500" />}
+            className="bg-gradient-to-br from-green-50 to-white"
+          />
         </div>
-      </header>
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Hello, {user?.email?.split('@')[0] || 'User'}</h1>
-          
-          {/* Voice Command Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">What's on your mind?</h2>
-            
-            <form onSubmit={handleSubmitCommand} className="flex items-center space-x-4 mb-2">
-              <Input
-                placeholder="Type or speak a command..."
-                value={voiceCommand}
-                onChange={(e) => setVoiceCommand(e.target.value)}
-                className="flex-1"
-              />
-              <Button 
-                type="button" 
-                onClick={handleVoiceCommand} 
-                className={`rounded-full w-12 h-12 flex items-center justify-center ${isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-brainai-electric-blue hover:bg-brainai-soft-blue'}`}
-              >
-                {isRecording ? <Play size={20} /> : <Mic size={20} />}
-              </Button>
-              <Button type="submit">Save</Button>
-            </form>
-            
-            <p className="text-sm text-gray-500">Try saying: "Remind me to call Rohan at 4 PM tomorrow"</p>
-          </div>
-          
-          {/* Memory Tabs */}
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div className="flex border-b border-gray-200">
-              {['recent', 'reminders', 'notes', 'conversations'].map((tab) => (
-                <button
-                  key={tab}
-                  className={`px-6 py-3 text-sm font-medium ${
-                    activeTab === tab
-                      ? 'text-brainai-electric-blue border-b-2 border-brainai-electric-blue'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                  onClick={() => setActiveTab(tab as typeof activeTab)}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </div>
-            
-            <div className="p-6">
-              <div className="space-y-4">
-                {memories.map((memory) => (
-                  <div key={memory.id} className="flex items-start p-4 bg-gray-50 rounded-lg">
-                    <div className="mr-4 mt-1">
-                      {memory.type === "reminder" && <Calendar size={20} className="text-amber-500" />}
-                      {memory.type === "note" && <Brain size={20} className="text-blue-500" />}
-                      {memory.type === "conversation" && <MessageSquare size={20} className="text-green-500" />}
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-gray-800">{memory.content}</p>
-                      <p className="text-sm text-gray-500 mt-1">{memory.timestamp}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {hasMore && (
-                <Button
-                  variant="outline"
-                  className="w-full mt-6"
-                  onClick={() => {
-                    setPage(page + 1);
-                    fetchMemories();
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    'Loading...'
-                  ) : (
-                    <>
-                      <Plus size={16} className="mr-2" />
-                      Load More Memories
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-          </div>
+        
+        {/* Voice Command Section */}
+        <div className="mb-8">
+          <VoiceCommandCard />
         </div>
-      </main>
-    </div>
+        
+        {/* Dashboard Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <QuickActions />
+          <RecentActivity items={recentActivity} />
+        </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
