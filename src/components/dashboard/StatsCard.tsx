@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface StatsCardProps {
   title: string;
@@ -11,6 +12,7 @@ interface StatsCardProps {
     positive: boolean;
   };
   className?: string;
+  iconClassName?: string;
 }
 
 const StatsCard: React.FC<StatsCardProps> = ({ 
@@ -18,20 +20,25 @@ const StatsCard: React.FC<StatsCardProps> = ({
   value, 
   icon, 
   trend,
-  className
+  className,
+  iconClassName
 }) => {
   return (
-    <Card className={`overflow-hidden border-none shadow-md ${className}`}>
+    <Card className={cn(
+      "overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300", 
+      className
+    )}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-500">{title}</p>
-            <h3 className="text-2xl font-bold mt-1">{value}</h3>
+            <h3 className="text-2xl sm:text-3xl font-bold mt-1">{value}</h3>
             
             {trend && (
-              <div className={`flex items-center mt-1 text-xs font-medium ${
+              <div className={cn(
+                "flex items-center mt-1 text-xs font-medium",
                 trend.positive ? 'text-green-600' : 'text-red-600'
-              }`}>
+              )}>
                 <span>{trend.positive ? '+' : '-'}{trend.value}%</span>
                 <svg
                   className={`w-3 h-3 ml-1 ${!trend.positive && 'transform rotate-180'}`}
@@ -52,7 +59,10 @@ const StatsCard: React.FC<StatsCardProps> = ({
             )}
           </div>
           
-          <div className="p-3 rounded-full bg-opacity-10 bg-gray-100">
+          <div className={cn(
+            "p-4 rounded-full bg-opacity-10",
+            iconClassName || "bg-gradient-to-br from-brainai-electric-blue/10 to-brainai-neon-purple/10"
+          )}>
             {icon}
           </div>
         </div>
