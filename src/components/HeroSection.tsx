@@ -1,10 +1,18 @@
+
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 const HeroSection = () => {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation();
   const { ref: subtitleRef, isVisible: subtitleVisible } = useScrollAnimation({ threshold: 0.2 });
   const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation({ threshold: 0.3 });
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
 
   return (
     <section className="min-h-[90vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
@@ -47,15 +55,20 @@ const HeroSection = () => {
           </Link>
         </div>
 
-        {/* Abstract UI Screenshot */}
-        <div className="mt-16 max-w-2xl mx-auto relative">
+        {/* Abstract UI Screenshot - Using public path for GitHub Pages compatibility */}
+        <div className={`mt-16 max-w-2xl mx-auto relative transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
           <div className="absolute -top-6 -left-6 w-12 h-12 bg-brainai-electric-blue rounded-full opacity-70 animate-float"></div>
           <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-brainai-neon-purple rounded-full opacity-70 animate-float" style={{ animationDelay: "1.5s" }}></div>
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-4 shadow-xl">
             <img 
-              src="image.jpeg"
+              src={`${import.meta.env.BASE_URL || '/brainai-nexus-web/'}image.jpeg`} 
               alt="BrainAi Interface" 
               className="w-full h-auto rounded-2xl" 
+              onError={(e) => {
+                // Fallback if image fails to load
+                console.error("Image failed to load, trying alternate path");
+                e.currentTarget.src = "./image.jpeg";
+              }}
             />
           </div>
         </div>

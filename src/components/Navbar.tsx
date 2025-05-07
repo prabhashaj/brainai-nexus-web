@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,9 +21,10 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
+    { name: 'Features', href: '#use-cases' },
     { name: 'How It Works', href: '#how-it-works' },
-    { name: 'Use Cases', href: '#use-cases' },
+    { name: 'Pricing', href: '#pricing' },
+    { name: 'Testimonials', href: '#testimonials' },
   ];
 
   return (
@@ -34,7 +36,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-brainai-electric-blue"></div>
+          <div className="h-8 w-8 rounded-full bg-brainai-electric-blue animate-pulse-glow"></div>
           <span className="font-bold text-lg tracking-tight">BrainAi</span>
         </a>
 
@@ -53,11 +55,13 @@ const Navbar = () => {
         
         {/* CTA Button */}
         <div className="hidden md:block">
-          <Button 
-            className="bg-black hover:bg-black/80 text-white rounded-full"
-          >
-            Download App
-          </Button>
+          <Link to="/auth">
+            <Button 
+              className="bg-black hover:bg-black/80 text-white rounded-full"
+            >
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -83,11 +87,13 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <Button 
-              className="bg-black hover:bg-black/80 text-white w-full rounded-full"
-            >
-              Download App
-            </Button>
+            <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
+              <Button 
+                className="bg-black hover:bg-black/80 text-white w-full rounded-full"
+              >
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       )}
