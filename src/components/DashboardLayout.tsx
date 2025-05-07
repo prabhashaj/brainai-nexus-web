@@ -133,10 +133,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       {/* Modern Sidebar with slide animation */}
       <aside 
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out transform",
+          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "lg:relative lg:translate-x-0",
-          isMobile && isSidebarOpen ? "translate-x-0" : ""
+          "lg:relative lg:z-0"
         )}
       >
         <div className="h-full flex flex-col">
@@ -150,17 +149,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               variant="ghost" 
               size="icon" 
               onClick={toggleSidebar}
-              className="lg:flex hidden"
+              className="lg:flex"
             >
               {isSidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden flex"
-            >
-              <X size={20} />
             </Button>
           </div>
 
@@ -175,7 +166,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               </Avatar>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                  {profile?.full_name || 'User'}
+                  {profile?.full_name || (user?.email?.split('@')[0]) || 'User'}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
                   {user?.email}
@@ -212,7 +203,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <div className="p-4 border-t">
             <Button 
               variant="outline" 
-              className="flex items-center w-full justify-start hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors" 
+              className="flex items-center w-full justify-start bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border-red-200 transition-colors" 
               onClick={handleSignOut}
             >
               <LogOut className="h-5 w-5 mr-2" />
@@ -231,7 +222,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              onClick={toggleSidebar}
               className="lg:hidden"
             >
               <Menu size={24} />
@@ -239,7 +230,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             
             <div className="ml-4 lg:ml-0">
               <h1 className="text-xl font-semibold text-gray-800">
-                Welcome back, {profile?.full_name || 'User'}
+                Welcome back, {profile?.full_name || (user?.email?.split('@')[0]) || 'User'}
               </h1>
               <p className="text-sm text-gray-500">
                 {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}

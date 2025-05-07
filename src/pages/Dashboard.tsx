@@ -3,16 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, Calendar, MessageSquare, Plus, Mic } from "lucide-react";
+import { Brain, Calendar, MessageSquare, Plus } from "lucide-react";
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import QuickActions from "@/components/dashboard/QuickActions";
-import VoiceCommandCard from "@/components/dashboard/VoiceCommandCard";
-import { Input } from "@/components/ui/input";
+import CommandInput from "@/components/dashboard/CommandInput";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 interface DashboardStats {
   notes: number;
@@ -311,34 +311,12 @@ const Dashboard = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
           <p className="text-gray-600">
-            Here's an overview of your activity
+            Welcome back, {profile?.full_name || user?.email?.split('@')[0] || 'User'}
           </p>
         </div>
         
-        {/* Command Input Card (Inspired by the reference image) */}
-        <Card className="mb-8 border-none shadow-lg overflow-hidden">
-          <CardContent className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">What's on your mind?</h2>
-            <div className="relative flex items-center">
-              <Input 
-                className="pr-24 pl-4 py-6 text-base bg-gray-900 text-white border-0 rounded-xl focus:ring-2 focus:ring-brainai-electric-blue"
-                placeholder="Type or speak a command..."
-              />
-              <div className="absolute right-2 flex space-x-2">
-                <Button 
-                  size="icon"
-                  className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90 text-white rounded-full w-10 h-10 flex items-center justify-center"
-                >
-                  <Mic size={20} />
-                </Button>
-                <Button className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
-                  Save
-                </Button>
-              </div>
-            </div>
-            <p className="text-sm text-gray-500 mt-3">Try saying: "Remind me to call Rohan at 4 PM tomorrow"</p>
-          </CardContent>
-        </Card>
+        {/* Command Input Card (Matching the reference image) */}
+        <CommandInput />
         
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -402,7 +380,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <Button onClick={handleCreateNote} className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
+                <Button onClick={handleCreateNote} className="bg-blue-500 hover:bg-blue-600 text-white">
                   Create Note
                 </Button>
               </div>
@@ -474,7 +452,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <Button onClick={handleCreateEvent} className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
+                <Button onClick={handleCreateEvent} className="bg-blue-500 hover:bg-blue-600 text-white">
                   Create Event
                 </Button>
               </div>
@@ -526,7 +504,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <Button onClick={handleCreateConversation} className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
+                <Button onClick={handleCreateConversation} className="bg-blue-500 hover:bg-blue-600 text-white">
                   Create Conversation
                 </Button>
               </div>
@@ -535,13 +513,14 @@ const Dashboard = () => {
         </div>
         
         {/* Tab Section with Recent/Notes/Events/Conversations */}
-        <div className="mb-8">
-          <Tabs defaultValue="recent" value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="recent">Recent</TabsTrigger>
-              <TabsTrigger value="notes">Notes</TabsTrigger>
-              <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="conversations">Conversations</TabsTrigger>
+        <div className="mb-8 bg-white rounded-xl shadow-md p-4">
+          <Tabs defaultValue="recent" value={activeTab} onValueChange={setActiveTab} 
+                className="w-full">
+            <TabsList className="mb-4 bg-gray-100 p-1 rounded-lg">
+              <TabsTrigger value="recent" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Recent</TabsTrigger>
+              <TabsTrigger value="reminders" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Reminders</TabsTrigger>
+              <TabsTrigger value="notes" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Notes</TabsTrigger>
+              <TabsTrigger value="conversations" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Conversations</TabsTrigger>
             </TabsList>
             
             <TabsContent value="recent">
@@ -580,11 +559,39 @@ const Dashboard = () => {
                       </div>
                     ))}
                     
-                    <Button variant="outline" className="w-full mt-4">
-                      Load More Memories
-                    </Button>
+                    <div className="flex justify-center">
+                      <Button variant="outline" className="w-full max-w-md flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 border-none">
+                        <Plus size={16} className="opacity-70" />
+                        <span>Load More Memories</span>
+                      </Button>
+                    </div>
                   </div>
                 )}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="reminders">
+              <div className="space-y-4 py-4">
+                <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-blue-100 text-blue-600">
+                      <Calendar className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-900">Remain me to call Rohan at 4 PM tomorrow</h3>
+                      <div className="flex items-center text-xs text-gray-500">
+                        <span>Just now</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <Button variant="outline" className="w-full max-w-md flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 border-none">
+                    <Plus size={16} className="opacity-70" />
+                    <span>Load More Memories</span>
+                  </Button>
+                </div>
               </div>
             </TabsContent>
             
@@ -592,22 +599,10 @@ const Dashboard = () => {
               <div className="text-center py-8">
                 <Button 
                   onClick={() => setIsNoteModalOpen(true)} 
-                  className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90"
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   Create a New Note
-                </Button>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="events">
-              <div className="text-center py-8">
-                <Button 
-                  onClick={() => setIsEventModalOpen(true)} 
-                  className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create a New Event
                 </Button>
               </div>
             </TabsContent>
@@ -616,7 +611,7 @@ const Dashboard = () => {
               <div className="text-center py-8">
                 <Button 
                   onClick={() => setIsConversationModalOpen(true)} 
-                  className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90"
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   Create a New Conversation

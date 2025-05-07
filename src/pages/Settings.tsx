@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +19,9 @@ interface Preferences {
   language: string;
   autoSave: boolean;
 }
+
+// JSON type from Supabase
+type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 const Settings = () => {
   const { toast } = useToast();
@@ -54,10 +56,18 @@ const Settings = () => {
         
         // If user has saved preferences in profile, use them
         if (data.preferences) {
-          setPreferences({
-            ...preferences,
-            ...data.preferences as Preferences
-          });
+          // Safe type conversion with fallback values
+          const userPrefs = data.preferences as Json;
+          const convertedPrefs: Preferences = {
+            theme: typeof userPrefs.theme === 'string' ? userPrefs.theme : preferences.theme,
+            notifications: typeof userPrefs.notifications === 'boolean' ? userPrefs.notifications : preferences.notifications,
+            emailNotifications: typeof userPrefs.emailNotifications === 'boolean' ? userPrefs.emailNotifications : preferences.emailNotifications,
+            twoFactorAuth: typeof userPrefs.twoFactorAuth === 'boolean' ? userPrefs.twoFactorAuth : preferences.twoFactorAuth,
+            language: typeof userPrefs.language === 'string' ? userPrefs.language : preferences.language,
+            autoSave: typeof userPrefs.autoSave === 'boolean' ? userPrefs.autoSave : preferences.autoSave
+          };
+          
+          setPreferences(convertedPrefs);
         }
       } catch (error: any) {
         console.error("Error fetching user profile:", error.message);
