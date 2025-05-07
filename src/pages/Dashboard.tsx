@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, Calendar, MessageSquare, Plus, Microphone } from "lucide-react";
+import { Brain, Calendar, MessageSquare, Plus, Mic } from "lucide-react";
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import QuickActions from "@/components/dashboard/QuickActions";
@@ -330,7 +329,7 @@ const Dashboard = () => {
                   size="icon"
                   className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90 text-white rounded-full w-10 h-10 flex items-center justify-center"
                 >
-                  <Microphone size={20} />
+                  <Mic size={20} />
                 </Button>
                 <Button className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
                   Save

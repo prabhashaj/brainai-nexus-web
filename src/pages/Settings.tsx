@@ -12,11 +12,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Moon, Sun, Bell, Shield, Key, Monitor, Palette } from "lucide-react";
 
+interface Preferences {
+  theme: string;
+  notifications: boolean;
+  emailNotifications: boolean;
+  twoFactorAuth: boolean;
+  language: string;
+  autoSave: boolean;
+}
+
 const Settings = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
-  const [preferences, setPreferences] = useState({
+  const [preferences, setPreferences] = useState<Preferences>({
     theme: "light",
     notifications: true,
     emailNotifications: true,
@@ -47,7 +56,7 @@ const Settings = () => {
         if (data.preferences) {
           setPreferences({
             ...preferences,
-            ...data.preferences
+            ...data.preferences as Preferences
           });
         }
       } catch (error: any) {
