@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -91,6 +90,7 @@ const CommandInput = () => {
           onChange={(e) => setCommand(e.target.value)}
           className="pr-24 pl-4 py-6 text-base bg-gray-800 text-white border-gray-700 rounded-lg focus:ring-2 focus:ring-brainai-electric-blue"
           placeholder="Type or speak a command..."
+          style={{ fontSize: '0.650rem' }} // Reduced the size of the text for the command input placeholder.
         />
         <div className="absolute right-2 flex space-x-2">
           <Button 

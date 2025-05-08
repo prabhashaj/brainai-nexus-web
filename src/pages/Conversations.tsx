@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -185,15 +184,15 @@ const Conversations = () => {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in-up">
-        <div className="flex justify-between items-center mb-6">
+      <div className="animate-fade-in-up px-4 md:px-8 lg:px-12 mt-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Conversations</h1>
           <Button 
             onClick={() => {
               resetForm();
               setIsFormOpen(true);
             }}
-            className="bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all"
+            className="w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all"
           >
             <Plus size={16} className="mr-2" />
             New Conversation
@@ -204,7 +203,7 @@ const Conversations = () => {
           <div className="relative">
             <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
-              className="pl-10"
+              className="pl-10 bg-white text-gray-900"
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -220,9 +219,9 @@ const Conversations = () => {
           <div className="space-y-4">
             {filteredConversations.map((conversation) => (
               <div key={conversation.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden">
-                <div className="p-6">
-                  <div className="flex items-start">
-                    <Avatar className="mr-4 h-10 w-10">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                    <Avatar className="w-10 h-10 shrink-0">
                       <AvatarImage src="" />
                       <AvatarFallback className="bg-green-100 text-green-700">
                         {conversation.with_person?.charAt(0) || 'C'}
@@ -230,7 +229,7 @@ const Conversations = () => {
                     </Avatar>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex justify-between">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <h3 className="text-lg font-semibold truncate">{conversation.title}</h3>
                         <div className="flex space-x-2">
                           <Button 
@@ -276,7 +275,7 @@ const Conversations = () => {
             <h3 className="text-xl font-semibold text-gray-600">No conversations found</h3>
             <p className="text-gray-500 mt-2">Create your first conversation to get started</p>
             <Button 
-              className="mt-4 bg-brainai-electric-blue hover:bg-brainai-soft-blue"
+              className="mt-4 w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue"
               onClick={() => {
                 resetForm();
                 setIsFormOpen(true);
@@ -290,34 +289,38 @@ const Conversations = () => {
       </div>
       
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] bg-white">
           <DialogHeader>
-            <DialogTitle>{formMode === 'create' ? 'Create New Conversation' : 'Edit Conversation'}</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-gray-900">
+              {formMode === 'create' ? 'Create New Conversation' : 'Edit Conversation'}
+            </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleFormSubmit} className="space-y-6 pt-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Title</label>
+              <label className="text-sm font-medium text-gray-900">Title</label>
               <Input
                 value={currentConversation.title}
                 onChange={(e) => setCurrentConversation({...currentConversation, title: e.target.value})}
                 placeholder="Conversation title"
                 required
+                className="bg-white text-gray-900"
               />
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">With Person</label>
+              <label className="text-sm font-medium text-gray-900">With Person</label>
               <Input
                 value={currentConversation.with_person}
                 onChange={(e) => setCurrentConversation({...currentConversation, with_person: e.target.value})}
                 placeholder="Person's name"
+                className="bg-white text-gray-900"
               />
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">Content</label>
+              <label className="text-sm font-medium text-gray-900">Content</label>
               <textarea
-                className="w-full border rounded-md p-3 h-36 focus:ring-2 focus:ring-brainai-electric-blue focus:ring-opacity-50 outline-none"
+                className="w-full border rounded-md p-3 h-36 focus:ring-2 focus:ring-brainai-electric-blue focus:ring-opacity-50 outline-none bg-white text-gray-900"
                 value={currentConversation.content}
                 onChange={(e) => setCurrentConversation({...currentConversation, content: e.target.value})}
                 placeholder="Conversation content or notes"

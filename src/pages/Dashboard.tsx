@@ -13,6 +13,7 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import DashboardFooter from "@/components/dashboard/DashboardFooter";
 
 interface DashboardStats {
   notes: number;
@@ -307,19 +308,14 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in-up p-4 md:p-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h1>
-          <p className="text-gray-600">
-            Welcome back, {profile?.full_name || user?.email?.split('@')[0] || 'User'}
-          </p>
-        </div>
+      <div className="animate-fade-in-up p-4 md:p-6 mt-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">Dashboard</h1>
         
-        {/* Command Input Card (Matching the reference image) */}
+        {/* Command Input Card */}
         <CommandInput />
         
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <StatsCard 
             title="Notes" 
             value={stats.notes} 
@@ -344,7 +340,7 @@ const Dashboard = () => {
         </div>
         
         {/* Quick Add Buttons */}
-        <div className="flex flex-wrap gap-4 mb-8">
+        <div className="flex flex-wrap gap-4 mb-12">
           {/* Note Dialog */}
           <Dialog open={isNoteModalOpen} onOpenChange={setIsNoteModalOpen}>
             <DialogTrigger asChild>
@@ -513,7 +509,7 @@ const Dashboard = () => {
         </div>
         
         {/* Tab Section with Recent/Notes/Events/Conversations */}
-        <div className="mb-8 bg-white rounded-xl shadow-md p-4">
+        <div className="mb-12 bg-white rounded-xl shadow-md p-4">
           <Tabs defaultValue="recent" value={activeTab} onValueChange={setActiveTab} 
                 className="w-full">
             <TabsList className="mb-4 bg-gray-100 p-1 rounded-lg">
@@ -621,6 +617,7 @@ const Dashboard = () => {
           </Tabs>
         </div>
       </div>
+      <DashboardFooter />
     </DashboardLayout>
   );
 };
