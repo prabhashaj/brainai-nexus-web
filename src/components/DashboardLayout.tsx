@@ -118,13 +118,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         className={cn(
           "fixed inset-y-0 left-0 z-40 bg-black text-white transition-all duration-300 ease-in-out",
           isSidebarCollapsed ? "w-16" : "w-64",
-          "border-r border-gray-800"
+          "border-r border-gray-800 shadow-lg"
         )}
       >
         {/* Logo */}
         <div className="p-4 flex items-center justify-between border-b border-gray-800">
           <div className={cn("flex items-center", isSidebarCollapsed ? "justify-center w-full" : "gap-2")}>
-            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple"></div>
+            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple shadow-[0_0_15px_rgba(139,92,246,0.5)]"></div>
             {!isSidebarCollapsed && (
               <span className="font-bold text-lg tracking-tight">BrainAi</span>
             )}
@@ -144,7 +144,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         {/* User Info */}
         <div className={cn("p-4 border-b border-gray-800", isSidebarCollapsed ? "flex justify-center" : "")}>
           <div className={cn("flex items-center", isSidebarCollapsed ? "flex-col" : "space-x-3")}>
-            <Avatar className="h-10 w-10 border border-gray-700">
+            <Avatar className="h-10 w-10 border-2 border-gray-700 shadow-md">
               <AvatarImage src={profile?.avatar_url} />
               <AvatarFallback className="bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple text-white">
                 {profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
@@ -172,10 +172,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  "flex items-center px-3 py-3 my-1 rounded-lg transition-all",
+                  "flex items-center px-3 py-3 my-1 rounded-lg transition-all duration-200",
                   isActive
-                    ? "bg-gray-800 text-brainai-electric-blue"
-                    : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                    ? "bg-gray-800 text-brainai-electric-blue shadow-[0_0_10px_rgba(30,174,219,0.3)]"
+                    : "text-gray-400 hover:bg-gray-800/50 hover:text-white",
                   isSidebarCollapsed ? "justify-center" : ""
                 )}
               >

@@ -1,7 +1,6 @@
+
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -35,8 +34,49 @@
 
 .card {
   padding: 2em;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .read-the-docs {
   color: #888;
+  font-size: 0.9em;
+  margin-top: 2em;
+  opacity: 0.8;
+}
+
+/* Enhanced Form Elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border-color: rgba(30, 174, 219, 0.5);
+  box-shadow: 0 0 0 2px rgba(30, 174, 219, 0.25);
+}
+
+/* Text colors and readability */
+.text-input {
+  color: white !important;
+}
+
+::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }

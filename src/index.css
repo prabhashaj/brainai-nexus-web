@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -59,6 +60,10 @@
     background-attachment: fixed;
   }
   
+  h1, h2, h3, h4, h5 {
+    @apply font-display tracking-tight;
+  }
+  
   /* Custom classes */
   .glass {
     @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl;
@@ -82,6 +87,19 @@
   
   .section-padding {
     @apply py-16 md:py-24 px-6 md:px-12;
+  }
+  
+  /* Button styles */
+  .btn-luxury {
+    @apply relative overflow-hidden rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1;
+  }
+  
+  .btn-luxury::after {
+    @apply content-[''] absolute inset-0 opacity-0 transition-opacity duration-300 bg-gradient-to-r from-brainai-electric-blue/20 to-brainai-neon-purple/20 blur-lg;
+  }
+  
+  .btn-luxury:hover::after {
+    @apply opacity-100;
   }
 
   /* Animation keyframes */
@@ -113,6 +131,15 @@
       box-shadow: 0 0 25px rgba(30, 174, 219, 0.8);
     }
   }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 }
 
 /* Animation classes */
@@ -128,6 +155,12 @@
   animation: pulse-glow 2s infinite;
 }
 
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
 /* Hide scrollbar but allow scrolling */
 html {
   scrollbar-width: none;
@@ -137,4 +170,3 @@ html {
 html::-webkit-scrollbar {
   display: none;
 }
-

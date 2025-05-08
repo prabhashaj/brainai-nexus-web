@@ -30,13 +30,13 @@ const Navbar = () => {
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'py-3 bg-black/30 backdrop-blur-lg border-b border-white/10' : 'py-6'
+        isScrolled ? 'py-3 bg-black/30 backdrop-blur-lg border-b border-white/10 shadow-lg' : 'py-6'
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-brainai-electric-blue animate-pulse-glow"></div>
+          <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple shadow-[0_0_15px_rgba(30,174,219,0.5)]"></div>
           <span className="font-bold text-lg tracking-tight">BrainAi</span>
         </a>
 
@@ -46,7 +46,7 @@ const Navbar = () => {
             <a 
               key={link.name}
               href={link.href}
-              className="text-sm text-white/80 hover:text-white transition-colors"
+              className="text-sm text-white/80 hover:text-white transition-colors hover:underline underline-offset-4"
             >
               {link.name}
             </a>
@@ -57,7 +57,7 @@ const Navbar = () => {
         <div className="hidden md:block">
           <Link to="/auth">
             <Button 
-              className="bg-black hover:bg-black/80 text-white rounded-full"
+              className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm rounded-full border border-white/20 shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(255,255,255,0.2)]"
             >
               Get Started
             </Button>
@@ -66,22 +66,22 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-white"
+          className="md:hidden text-white p-2 rounded-full bg-white/10 backdrop-blur-sm"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 glass p-4 border-t border-white/10">
+        <div className="md:hidden absolute top-full left-0 right-0 glass p-4 border-t border-white/10 shadow-lg backdrop-blur-md">
           <div className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <a 
                 key={link.name}
                 href={link.href}
-                className="text-sm text-white/80 hover:text-white transition-colors py-2"
+                className="text-sm text-white/80 hover:text-white transition-colors py-2 hover:translate-x-1 transform duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.name}
@@ -89,7 +89,7 @@ const Navbar = () => {
             ))}
             <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
               <Button 
-                className="bg-black hover:bg-black/80 text-white w-full rounded-full"
+                className="bg-white/10 hover:bg-white/20 text-white w-full rounded-full border border-white/20 backdrop-blur-sm"
               >
                 Get Started
               </Button>
