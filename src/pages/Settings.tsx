@@ -17,6 +17,14 @@ interface PreferencesType {
   autoSave: boolean;
 }
 
+// This is a workaround since the user_preferences table might not exist in the database schema
+// We'll use a custom type to handle this until proper migrations can be done
+interface UserPreference {
+  id?: string;
+  user_id: string;
+  preferences: PreferencesType;
+}
+
 const Settings = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -48,13 +56,17 @@ const Settings = () => {
 
   const fetchUserPreferences = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('user_preferences')
-        .select('preferences')
+      // Using the .from() method with a type assertion to handle the table that might not exist in the types
+      const { data, error } = await (supabase
+        .from('user_preferences' as any)
+        .select('*')
         .eq('user_id', userId)
-        .single();
+        .single() as any);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching preferences:", error);
+        return; // Just use default preferences
+      }
       
       if (data?.preferences) {
         // Parse preferences from JSON if stored as string, or use as object if already in object form
@@ -82,12 +94,13 @@ const Settings = () => {
     
     setSaving(true);
     try {
-      const { error } = await supabase
-        .from('user_preferences')
+      // Using the .from() method with a type assertion to handle the table that might not exist in the types
+      const { error } = await (supabase
+        .from('user_preferences' as any)
         .upsert({
           user_id: user.id,
-          preferences: preferences
-        });
+          preferences: preferences as any
+        }) as any);
 
       if (error) throw error;
 

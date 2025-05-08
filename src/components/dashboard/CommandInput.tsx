@@ -82,14 +82,14 @@ const CommandInput = () => {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-6 mb-8">
+    <div className="bg-white rounded-xl shadow p-6 mb-8">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">What's on your mind?</h2>
       <div className="relative flex items-center">
         <Input
           ref={inputRef}
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          className="pr-24 pl-4 py-6 text-base bg-gray-900 text-white border-0 rounded-xl focus:ring-2 focus:ring-blue-500"
+          className="pr-24 pl-4 py-6 text-base bg-gray-900 text-white border-0 rounded-lg focus:ring-2 focus:ring-blue-500"
           placeholder="Type or speak a command..."
         />
         <div className="absolute right-2 flex space-x-2">
