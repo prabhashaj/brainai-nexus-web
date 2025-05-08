@@ -1,8 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import image from '/images/image.jpeg';
 
 const HeroSection = () => {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation();
@@ -63,13 +63,9 @@ const HeroSection = () => {
           
           <div className="glass shadow-2xl backdrop-blur-md rounded-3xl p-4 border border-white/10">
             <img 
-              src={`${import.meta.env.BASE_URL || '/brainai-nexus-web/'}image.jpeg`} 
+              src={image} 
               alt="BrainAi Interface" 
               className="w-full h-auto rounded-2xl shadow-inner" 
-              onError={(e) => {
-                console.error("Image failed to load, trying alternate path");
-                e.currentTarget.src = "./image.jpeg";
-              }}
             />
           </div>
         </div>
