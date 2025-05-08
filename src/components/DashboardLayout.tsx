@@ -10,9 +10,8 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -30,7 +29,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { toast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -49,14 +48,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      if (window.innerWidth >= 1024) {
-        setIsSidebarOpen(true);
-      } else if (mobile) {
+      if (mobile) {
         setIsSidebarOpen(false);
       }
     };
 
     window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
     return () => window.removeEventListener('resize', handleResize);
   }, [navigate]);
 
@@ -119,7 +117,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Design inspired by the reference image
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile Overlay */}
@@ -130,10 +127,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         ></div>
       )}
 
-      {/* Modern Sidebar with slide animation */}
+      {/* Sidebar */}
       <aside 
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-xl transition-all duration-300 ease-in-out",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
           "lg:relative lg:z-0"
         )}
@@ -151,7 +148,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               onClick={toggleSidebar}
               className="lg:flex"
             >
-              {isSidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+              <ChevronLeft size={20} />
             </Button>
           </div>
 
@@ -214,21 +211,24 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen transition-all duration-300">
+      <div className={cn(
+        "flex-1 flex flex-col min-h-screen transition-all duration-300",
+        isSidebarOpen ? "lg:ml-64" : "ml-0"
+      )}>
         {/* Top Header Bar */}
         <header className="bg-white shadow-sm py-4 px-6 flex items-center justify-between sticky top-0 z-20">
           <div className="flex items-center">
-            {/* Mobile menu button */}
+            {/* Toggle button - always visible */}
             <Button 
-              variant="ghost" 
+              variant="outline"
               size="icon"
               onClick={toggleSidebar}
-              className="lg:hidden"
+              className="border-gray-200 text-gray-800 hover:bg-gray-100"
             >
-              <Menu size={24} />
+              {isSidebarOpen ? <ChevronLeft size={20} /> : <Menu size={20} />}
             </Button>
             
-            <div className="ml-4 lg:ml-0">
+            <div className="ml-4">
               <h1 className="text-xl font-semibold text-gray-800">
                 Welcome back, {profile?.full_name || (user?.email?.split('@')[0]) || 'User'}
               </h1>

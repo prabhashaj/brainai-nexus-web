@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mic } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useTriggerWords } from "@/hooks/useTriggerWords";
 
 const commandSuggestions = [
   "Remind me to call Rohan at 4 PM tomorrow",
@@ -23,17 +22,6 @@ const CommandInput = () => {
   const [currentSuggestion, setCurrentSuggestion] = useState(commandSuggestions[0]);
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Handle trigger word activation
-  const handleTriggerActivation = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      handleMicClick();
-    }
-  };
-
-  // Initialize trigger word detection
-  useTriggerWords(handleTriggerActivation);
 
   // Rotate through command suggestions every 10 seconds
   useEffect(() => {
