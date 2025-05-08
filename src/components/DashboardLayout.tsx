@@ -104,11 +104,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       icon: <User className="h-5 w-5" />,
       href: "/profile",
     },
-    {
-      title: "Settings",
-      icon: <Settings className="h-5 w-5" />,
-      href: "/settings",
-    },
   ];
 
   // Toggle sidebar
@@ -223,6 +218,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               size="icon"
               onClick={toggleSidebar}
               className="text-gray-800 hover:bg-gray-100 mr-4"
+              aria-label="Toggle sidebar"
             >
               <Menu size={20} />
             </Button>
@@ -239,7 +235,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </header>
         
         {/* Content Area */}
-        <main className="flex-1 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden bg-gray-50">
           {children}
         </main>
       </div>

@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { Toggle } from "@/components/ui/toggle";
+import { Bell, Calendar, Moon, Mic, WifiOff, User } from "lucide-react";
 
 interface ProfileData {
   id: string;
@@ -27,6 +28,7 @@ const ProfilePage = () => {
     full_name: "",
     bio: "",
   });
+  const [darkMode, setDarkMode] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -167,109 +169,162 @@ const ProfilePage = () => {
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6 max-w-4xl mx-auto animate-fade-in-up">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Your Profile</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="md:col-span-1 border-none shadow-md overflow-hidden">
-            <CardContent className="p-6 flex flex-col items-center">
-              <div className="relative mb-4">
-                <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
-                  <AvatarImage src={profile?.avatar_url || ""} alt="Avatar" />
-                  <AvatarFallback className="bg-brainai-electric-blue text-white text-4xl">
-                    {profile?.full_name?.charAt(0).toUpperCase() || <User className="h-16 w-16" />}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute bottom-0 right-0">
-                  <Button 
-                    className="rounded-full bg-brainai-electric-blue hover:bg-brainai-electric-blue/90 h-10 w-10 p-2"
-                    disabled={uploading}
-                    onClick={() => document.getElementById("avatar-upload")?.click()}
-                  >
-                    {uploading ? (
-                      <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                    )}
-                  </Button>
-                  <input
-                    type="file"
-                    id="avatar-upload"
-                    accept="image/*"
-                    onChange={uploadAvatar}
-                    className="hidden"
-                  />
-                </div>
+        <div className="bg-gray-900 rounded-xl p-6 shadow-lg mb-8 text-white">
+          <div className="flex flex-col items-center">
+            <div className="relative mb-4">
+              <Avatar className="h-24 w-24 border-2 border-brainai-electric-blue shadow-lg">
+                <AvatarImage src={profile?.avatar_url || ""} alt="Avatar" />
+                <AvatarFallback className="bg-brainai-neon-purple text-white text-2xl">
+                  {profile?.full_name?.charAt(0).toUpperCase() || <User className="h-10 w-10" />}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute bottom-0 right-0">
+                <Button 
+                  className="rounded-full bg-brainai-electric-blue hover:bg-brainai-soft-blue h-10 w-10 p-2"
+                  disabled={uploading}
+                  onClick={() => document.getElementById("avatar-upload")?.click()}
+                >
+                  {uploading ? (
+                    <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  )}
+                </Button>
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  accept="image/*"
+                  onChange={uploadAvatar}
+                  className="hidden"
+                />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">
-                {profile?.full_name || "Your Name"}
-              </h2>
-              <p className="text-gray-600 mt-1">
-                {profile?.bio || "No bio yet"}
-              </p>
-              <p className="text-xs text-gray-400 mt-4">
-                Joined {profile?.created_at && new Date(profile.created_at).toLocaleDateString()}
-              </p>
-            </CardContent>
-          </Card>
+            </div>
+            <h2 className="text-2xl font-bold text-white">
+              {profile?.full_name || "Your Name"}
+            </h2>
+            <p className="text-gray-300 mt-1 text-center">
+              {profile?.bio || "No bio yet"}
+            </p>
+            <p className="text-xs text-gray-400 mt-2">
+              Joined {profile?.created_at && new Date(profile.created_at).toLocaleDateString()}
+            </p>
+          </div>
 
-          <Card className="md:col-span-2 border-none shadow-md">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Edit Profile</h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name
-                  </label>
-                  <Input
-                    id="full_name"
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="bg-white text-black"
-                    placeholder="Your full name"
-                  />
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-white mb-4">Settings</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <div className="flex items-center gap-3">
+                  <Bell className="h-5 w-5 text-brainai-neon-purple" />
+                  <span>Notifications</span>
                 </div>
-                <div>
-                  <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
-                    Bio
-                  </label>
-                  <Textarea
-                    id="bio"
-                    value={formData.bio || ""}
-                    onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                    className="bg-white text-black min-h-[100px]"
-                    placeholder="Write a short bio about yourself..."
-                  />
-                </div>
-                <div className="pt-4">
-                  <Button 
-                    onClick={updateProfile} 
-                    className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90"
-                  >
-                    Save Changes
-                  </Button>
-                </div>
+                <Toggle />
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-5 w-5 text-brainai-neon-purple" />
+                  <span>Calendar Sync</span>
+                </div>
+                <Toggle />
+              </div>
+              
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <div className="flex items-center gap-3">
+                  <Moon className="h-5 w-5 text-brainai-neon-purple" />
+                  <span>Dark Mode</span>
+                </div>
+                <Toggle pressed={darkMode} onPressedChange={setDarkMode} className="bg-gray-700 data-[state=on]:bg-brainai-neon-purple" />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-white mb-4">Voice Settings</h2>
+            <div className="space-y-4">
+              <div className="p-4 border-b border-gray-700">
+                <p className="text-gray-300 mb-2">Wake Phrase</p>
+                <Input 
+                  value="Activate" 
+                  readOnly
+                  className="bg-gray-800 border-gray-700 text-white" 
+                />
+              </div>
+              
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <div className="flex items-center gap-3">
+                  <Mic className="h-5 w-5 text-brainai-neon-purple" />
+                  <span>Passive Listening</span>
+                </div>
+                <Toggle />
+              </div>
+              
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <div className="flex items-center gap-3">
+                  <WifiOff className="h-5 w-5 text-brainai-neon-purple" />
+                  <span>Offline Mode</span>
+                </div>
+                <Toggle />
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-white mb-4">Edit Profile</h2>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="full_name" className="block text-sm font-medium text-gray-300 mb-1">
+                  Full Name
+                </label>
+                <Input
+                  id="full_name"
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                  className="bg-gray-800 border-gray-700 text-white focus:ring-brainai-electric-blue"
+                  placeholder="Your full name"
+                />
+              </div>
+              <div>
+                <label htmlFor="bio" className="block text-sm font-medium text-gray-300 mb-1">
+                  Bio
+                </label>
+                <Textarea
+                  id="bio"
+                  value={formData.bio || ""}
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  className="bg-gray-800 border-gray-700 text-white min-h-[100px] focus:ring-brainai-electric-blue"
+                  placeholder="Write a short bio about yourself..."
+                />
+              </div>
+              <div className="pt-4">
+                <Button 
+                  onClick={updateProfile} 
+                  className="bg-brainai-electric-blue hover:bg-brainai-soft-blue"
+                >
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </DashboardLayout>

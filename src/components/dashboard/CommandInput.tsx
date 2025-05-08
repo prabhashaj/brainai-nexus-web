@@ -82,33 +82,33 @@ const CommandInput = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow p-6 mb-8">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">What's on your mind?</h2>
+    <div className="bg-gray-900 rounded-xl shadow-lg p-6 mb-8 text-white">
+      <h2 className="text-2xl font-semibold mb-4 text-white">What's on your mind?</h2>
       <div className="relative flex items-center">
         <Input
           ref={inputRef}
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          className="pr-24 pl-4 py-6 text-base bg-gray-900 text-white border-0 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="pr-24 pl-4 py-6 text-base bg-gray-800 text-white border-gray-700 rounded-lg focus:ring-2 focus:ring-brainai-electric-blue"
           placeholder="Type or speak a command..."
         />
         <div className="absolute right-2 flex space-x-2">
           <Button 
             size="icon"
             onClick={handleMicClick}
-            className={`${isListening ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white rounded-full w-10 h-10 flex items-center justify-center`}
+            className={`${isListening ? 'bg-red-500 hover:bg-red-600' : 'bg-brainai-electric-blue hover:bg-brainai-soft-blue'} text-white rounded-full w-10 h-10 flex items-center justify-center`}
           >
             <Mic size={20} />
           </Button>
           <Button 
             onClick={handleSave}
-            className="bg-blue-500 hover:bg-blue-600 text-white"
+            className="bg-brainai-electric-blue hover:bg-brainai-soft-blue text-white"
           >
             Save
           </Button>
         </div>
       </div>
-      <p className="text-sm text-gray-500 mt-3">Try saying: "{currentSuggestion}"</p>
+      <p className="text-sm text-gray-400 mt-3">Try saying: "{currentSuggestion}"</p>
     </div>
   );
 };

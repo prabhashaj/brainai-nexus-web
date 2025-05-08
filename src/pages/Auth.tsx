@@ -13,6 +13,7 @@ import { ChevronLeft, LogIn } from "lucide-react";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -34,13 +35,37 @@ const Auth = () => {
     setLoading(true);
     setError("");
     
+    if (!fullName.trim()) {
+      setError("Please enter your full name");
+      setLoading(false);
+      return;
+    }
+    
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName
+          }
+        }
       });
 
       if (error) throw error;
+      
+      // Create a profile entry for the new user
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert([
+            { id: data.user.id, full_name: fullName }
+          ]);
+          
+        if (profileError) {
+          console.error("Error creating profile:", profileError);
+        }
+      }
       
       toast({
         title: "Success!",
@@ -90,6 +115,10 @@ const Auth = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent'
+          },
           redirectTo: window.location.origin + import.meta.env.BASE_URL + "dashboard"
         }
       });
@@ -102,13 +131,13 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <Button 
             variant="ghost" 
             size="sm" 
-            className="mb-4" 
+            className="mb-4 text-gray-300 hover:text-white" 
             onClick={() => navigate("/")}
           >
             <ChevronLeft size={16} className="mr-1" /> Back to Home
@@ -116,23 +145,23 @@ const Auth = () => {
           
           <div className="flex items-center justify-center gap-2 mb-4">
             <div className="h-10 w-10 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple animate-pulse"></div>
-            <span className="font-bold text-xl text-gray-800 tracking-tight">BrainAi</span>
+            <span className="font-bold text-xl text-white tracking-tight">BrainAi</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to BrainAi</h1>
-          <p className="text-gray-600">Your personal AI memory assistant</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Welcome to BrainAi</h1>
+          <p className="text-gray-400">Your personal AI memory assistant</p>
         </div>
 
-        <div className="bg-white shadow-xl rounded-xl p-6 border border-gray-100 bg-gradient-to-br from-white to-gray-50">
+        <div className="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700 text-white">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-gray-700">
+              <TabsTrigger value="signin" className="data-[state=active]:bg-brainai-electric-blue">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-brainai-electric-blue">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-gray-300">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -140,13 +169,13 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="transition-all duration-200 focus:ring-2 focus:ring-brainai-electric-blue/30"
+                    className="bg-gray-700 border-gray-600 text-white focus:ring-brainai-electric-blue"
                   />
                 </div>
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="text-gray-300">Password</Label>
                     <a href="#" className="text-sm text-brainai-electric-blue hover:text-brainai-soft-blue">
                       Forgot password?
                     </a>
@@ -158,12 +187,12 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="transition-all duration-200 focus:ring-2 focus:ring-brainai-electric-blue/30"
+                    className="bg-gray-700 border-gray-600 text-white focus:ring-brainai-electric-blue"
                   />
                 </div>
                 
                 {error && (
-                  <Alert variant="destructive" className="animate-fade-in-up">
+                  <Alert variant="destructive" className="animate-fade-in-up bg-red-900 border-red-800 text-white">
                     {error}
                   </Alert>
                 )}
@@ -178,17 +207,17 @@ const Auth = () => {
                 
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
+                    <div className="w-full border-t border-gray-700"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                    <span className="bg-gray-800 px-2 text-gray-400">Or continue with</span>
                   </div>
                 </div>
                 
                 <Button 
                   type="button" 
                   variant="outline" 
-                  className="w-full border-gray-300 hover:bg-gray-50 transition-all"
+                  className="w-full border-gray-600 hover:bg-gray-700 transition-all text-white"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
                 >
@@ -218,7 +247,20 @@ const Auth = () => {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="full_name" className="text-gray-300">Full Name</Label>
+                  <Input
+                    id="full_name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                    className="bg-gray-700 border-gray-600 text-white focus:ring-brainai-electric-blue"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email" className="text-gray-300">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -226,12 +268,12 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="transition-all duration-200 focus:ring-2 focus:ring-brainai-electric-blue/30"
+                    className="bg-gray-700 border-gray-600 text-white focus:ring-brainai-electric-blue"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="signup-password" className="text-gray-300">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -239,12 +281,12 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="transition-all duration-200 focus:ring-2 focus:ring-brainai-electric-blue/30"
+                    className="bg-gray-700 border-gray-600 text-white focus:ring-brainai-electric-blue"
                   />
                 </div>
                 
                 {error && (
-                  <Alert variant="destructive" className="animate-fade-in-up">
+                  <Alert variant="destructive" className="animate-fade-in-up bg-red-900 border-red-800 text-white">
                     {error}
                   </Alert>
                 )}
@@ -259,17 +301,17 @@ const Auth = () => {
                 
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
+                    <div className="w-full border-t border-gray-700"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                    <span className="bg-gray-800 px-2 text-gray-400">Or continue with</span>
                   </div>
                 </div>
                 
                 <Button 
                   type="button" 
                   variant="outline" 
-                  className="w-full border-gray-300 hover:bg-gray-50 transition-all"
+                  className="w-full border-gray-600 hover:bg-gray-700 transition-all text-white"
                   onClick={handleGoogleSignIn}
                   disabled={loading}
                 >
@@ -299,7 +341,7 @@ const Auth = () => {
         </div>
         
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-400 text-sm">
             By continuing, you agree to BrainAi's{" "}
             <a href="#" className="text-brainai-electric-blue hover:underline">
               Terms of Service

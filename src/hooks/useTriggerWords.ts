@@ -1,18 +1,12 @@
 
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export const useTriggerWords = (callback?: () => void) => {
-  const [isListening, setIsListening] = useState(false);
-  const { toast } = useToast();
-
-  // This hook now does nothing - trigger word functionality removed
-  useEffect(() => {
-    // Functionality removed as requested
-    return () => {
-      // Empty cleanup
-    };
-  }, [callback, toast, isListening]);
+  // This is now just a dummy hook that does nothing, as requested
+  const [isListening] = useState(false);
   
-  return { isListening };
+  // The hook is completely emptied of any functionality
+  return { isListening: false };
 };
+
+export default useTriggerWords;
