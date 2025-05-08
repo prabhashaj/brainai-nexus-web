@@ -113,10 +113,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* YouTube-style Sidebar */}
+      {/* Sidebar */}
       <aside 
         className={cn(
-          "fixed inset-y-0 left-0 z-40 bg-gray-900 text-white transition-all duration-300 ease-in-out",
+          "fixed inset-y-0 left-0 z-40 bg-black text-white transition-all duration-300 ease-in-out",
           isSidebarCollapsed ? "w-16" : "w-64",
           "border-r border-gray-800"
         )}
@@ -174,7 +174,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 className={cn(
                   "flex items-center px-3 py-3 my-1 rounded-lg transition-all",
                   isActive
-                    ? "bg-gray-800 text-white"
+                    ? "bg-gray-800 text-brainai-electric-blue"
                     : "text-gray-400 hover:bg-gray-800 hover:text-white",
                   isSidebarCollapsed ? "justify-center" : ""
                 )}
@@ -217,7 +217,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="text-gray-800 hover:bg-gray-100 mr-4"
+              className="text-black hover:bg-gray-100 mr-4"
               aria-label="Toggle sidebar"
             >
               <Menu size={20} />

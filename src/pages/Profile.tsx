@@ -6,9 +6,8 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Toggle } from "@/components/ui/toggle";
+import { Switch } from "@/components/ui/switch";
 import { Bell, Calendar, Moon, Mic, WifiOff, User } from "lucide-react";
 
 interface ProfileData {
@@ -29,6 +28,10 @@ const ProfilePage = () => {
     bio: "",
   });
   const [darkMode, setDarkMode] = useState(false);
+  const [notifications, setNotifications] = useState(false);
+  const [calendarSync, setCalendarSync] = useState(false);
+  const [passiveListening, setPassiveListening] = useState(false);
+  const [offlineMode, setOfflineMode] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -38,7 +41,10 @@ const ProfilePage = () => {
   const fetchProfile = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not found");
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const { data, error } = await supabase
         .from("profiles")
@@ -46,13 +52,18 @@ const ProfilePage = () => {
         .eq("id", user.id)
         .single();
 
-      if (error) throw error;
+      if (error && error.code !== 'PGRST116') {
+        console.error("Error fetching profile:", error);
+        throw error;
+      }
 
-      setProfile(data as ProfileData);
-      setFormData({
-        full_name: data.full_name || "",
-        bio: data.bio || "",
-      });
+      if (data) {
+        setProfile(data as ProfileData);
+        setFormData({
+          full_name: data.full_name || "",
+          bio: data.bio || "",
+        });
+      }
     } catch (error: any) {
       console.error("Error fetching profile:", error.message);
       toast({
@@ -231,13 +242,17 @@ const ProfilePage = () => {
 
           <div className="mt-10">
             <h2 className="text-xl font-bold text-white mb-4">Settings</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 rounded-lg overflow-hidden">
               <div className="flex items-center justify-between p-4 border-b border-gray-700">
                 <div className="flex items-center gap-3">
                   <Bell className="h-5 w-5 text-brainai-neon-purple" />
                   <span>Notifications</span>
                 </div>
-                <Toggle />
+                <Switch 
+                  checked={notifications} 
+                  onCheckedChange={setNotifications} 
+                  className="data-[state=checked]:bg-brainai-neon-purple"
+                />
               </div>
               
               <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -245,7 +260,11 @@ const ProfilePage = () => {
                   <Calendar className="h-5 w-5 text-brainai-neon-purple" />
                   <span>Calendar Sync</span>
                 </div>
-                <Toggle />
+                <Switch 
+                  checked={calendarSync} 
+                  onCheckedChange={setCalendarSync}
+                  className="data-[state=checked]:bg-brainai-neon-purple"
+                />
               </div>
               
               <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -253,14 +272,18 @@ const ProfilePage = () => {
                   <Moon className="h-5 w-5 text-brainai-neon-purple" />
                   <span>Dark Mode</span>
                 </div>
-                <Toggle pressed={darkMode} onPressedChange={setDarkMode} className="bg-gray-700 data-[state=on]:bg-brainai-neon-purple" />
+                <Switch 
+                  checked={darkMode} 
+                  onCheckedChange={setDarkMode}
+                  className="data-[state=checked]:bg-brainai-neon-purple" 
+                />
               </div>
             </div>
           </div>
 
           <div className="mt-10">
             <h2 className="text-xl font-bold text-white mb-4">Voice Settings</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 rounded-lg overflow-hidden">
               <div className="p-4 border-b border-gray-700">
                 <p className="text-gray-300 mb-2">Wake Phrase</p>
                 <Input 
@@ -275,7 +298,11 @@ const ProfilePage = () => {
                   <Mic className="h-5 w-5 text-brainai-neon-purple" />
                   <span>Passive Listening</span>
                 </div>
-                <Toggle />
+                <Switch 
+                  checked={passiveListening} 
+                  onCheckedChange={setPassiveListening}
+                  className="data-[state=checked]:bg-brainai-neon-purple" 
+                />
               </div>
               
               <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -283,7 +310,11 @@ const ProfilePage = () => {
                   <WifiOff className="h-5 w-5 text-brainai-neon-purple" />
                   <span>Offline Mode</span>
                 </div>
-                <Toggle />
+                <Switch 
+                  checked={offlineMode} 
+                  onCheckedChange={setOfflineMode}
+                  className="data-[state=checked]:bg-brainai-neon-purple" 
+                />
               </div>
             </div>
           </div>
