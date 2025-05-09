@@ -73,7 +73,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       href: "/events",
     },
     {
-      title: "Convos",
+      title: "Conversations",
       icon: <MessageSquare className="h-5 w-5" />,
       href: "/conversations",
     },
