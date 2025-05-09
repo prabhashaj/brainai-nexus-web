@@ -512,11 +512,19 @@ const Dashboard = () => {
         <div className="mb-12 bg-white rounded-xl shadow-md p-4">
           <Tabs defaultValue="recent" value={activeTab} onValueChange={setActiveTab} 
                 className="w-full">
-            <TabsList className="mb-3 bg-gray-100 p-1 rounded-lg">
-              <TabsTrigger value="recent" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Recent</TabsTrigger>
-              <TabsTrigger value="reminders" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Reminders</TabsTrigger>
-              <TabsTrigger value="notes" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Notes</TabsTrigger>
-              <TabsTrigger value="conversations" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Convos</TabsTrigger>
+            <TabsList className="mb-2 bg-gray-100 p-0.5 rounded-md">
+              <TabsTrigger value="recent" className="text-sm px-3 py-1 data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Recent
+              </TabsTrigger>
+              <TabsTrigger value="reminders" className="text-sm px-3 py-1 data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Reminders
+              </TabsTrigger>
+              <TabsTrigger value="notes" className="text-sm px-3 py-1 data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Notes
+              </TabsTrigger>
+              <TabsTrigger value="conversations" className="text-sm px-3 py-1 data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Convos
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="recent">
