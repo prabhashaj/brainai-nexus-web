@@ -516,7 +516,7 @@ const Dashboard = () => {
               <TabsTrigger value="recent" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Recent</TabsTrigger>
               <TabsTrigger value="reminders" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Reminders</TabsTrigger>
               <TabsTrigger value="notes" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Notes</TabsTrigger>
-              <TabsTrigger value="conversations" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Conversations</TabsTrigger>
+              <TabsTrigger value="conversations" className="data-[state=active]:bg-white data-[state=active]:text-blue-600">Convos</TabsTrigger>
             </TabsList>
             
             <TabsContent value="recent">
