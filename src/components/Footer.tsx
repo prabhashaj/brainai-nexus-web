@@ -1,5 +1,6 @@
 
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import Logo from "./Logo";
 
 const Footer = () => {
   const { ref, isVisible } = useScrollAnimation();
@@ -12,9 +13,8 @@ const Footer = () => {
       >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple"></div>
-              <span className="font-bold text-lg tracking-tight">BrainAi</span>
+            <div className="mb-4">
+              <Logo variant="dark" size="md" withText={true} />
             </div>
             <p className="text-sm text-white/70 max-w-xs">
               Amplifying the human brain, not replacing it. BrainAi is built to make your life easier, smarter, and calmer.
