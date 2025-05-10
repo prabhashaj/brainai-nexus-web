@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -186,24 +187,24 @@ const Conversations = () => {
     <DashboardLayout>
       <div className="animate-fade-in-up px-4 md:px-8 lg:px-12 mt-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Conversations</h1>
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800">Conversations</h1>
           <Button 
             onClick={() => {
               resetForm();
               setIsFormOpen(true);
             }}
-            className="w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all"
+            className="w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1"
           >
             <Plus size={16} className="mr-2" />
             New Conversation
           </Button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] p-5 mb-6 border border-gray-100">
           <div className="relative">
-            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
-              className="pl-10 bg-white text-gray-900"
+              className="pl-12 bg-white text-gray-900 border-gray-200 rounded-xl focus:border-brainai-electric-blue focus:ring-brainai-electric-blue/20"
               placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -218,50 +219,58 @@ const Conversations = () => {
         ) : filteredConversations.length > 0 ? (
           <div className="space-y-4">
             {filteredConversations.map((conversation) => (
-              <div key={conversation.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden">
-                <div className="p-4 sm:p-6">
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                    <Avatar className="w-10 h-10 shrink-0">
+              <div 
+                key={conversation.id} 
+                className="group bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+              >
+                <div className="p-5 sm:p-6">
+                  <div className="flex gap-5">
+                    <Avatar className="w-12 h-12 shrink-0 rounded-full shadow-md border-2 border-white">
                       <AvatarImage src="" />
-                      <AvatarFallback className="bg-green-100 text-green-700">
+                      <AvatarFallback className="bg-gradient-to-br from-brainai-soft-blue to-brainai-neon-purple text-white font-medium">
                         {conversation.with_person?.charAt(0) || 'C'}
                       </AvatarFallback>
                     </Avatar>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <h3 className="text-lg font-semibold truncate">{conversation.title}</h3>
-                        <div className="flex space-x-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+                        <h3 className="text-xl font-serif font-semibold truncate">{conversation.title}</h3>
+                        <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <Button 
                             size="sm" 
                             variant="ghost" 
-                            className="h-8 w-8 p-0" 
+                            className="h-8 w-8 p-0 rounded-full bg-gray-100/80 hover:bg-gray-200/80" 
                             onClick={() => handleEdit(conversation)}
                           >
-                            <Pencil size={16} />
+                            <Pencil size={14} />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="ghost" 
-                            className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50" 
+                            className="h-8 w-8 p-0 rounded-full bg-gray-100/80 hover:bg-red-100 text-gray-600 hover:text-red-600" 
                             onClick={() => handleDelete(conversation.id)}
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={14} />
                           </Button>
                         </div>
                       </div>
                       
                       {conversation.with_person && (
-                        <div className="flex items-center text-gray-500 text-sm mt-1">
-                          <User size={14} className="mr-1" />
+                        <div className="flex items-center text-sm text-brainai-electric-blue font-medium mb-2">
+                          <User size={14} className="mr-1 opacity-70" />
                           <span>{conversation.with_person}</span>
                         </div>
                       )}
                       
-                      <p className="mt-3 text-gray-600 line-clamp-3">{conversation.content}</p>
+                      <p className="text-gray-600 line-clamp-2 mb-3">{conversation.content}</p>
                       
-                      <div className="mt-4 text-xs text-gray-500">
-                        {new Date(conversation.updated_at).toLocaleString()}
+                      <div className="text-xs text-gray-500 font-medium">
+                        {new Date(conversation.updated_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
                       </div>
                     </div>
                   </div>
@@ -270,12 +279,14 @@ const Conversations = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <MessageSquare size={48} className="mx-auto text-gray-300 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-600">No conversations found</h3>
-            <p className="text-gray-500 mt-2">Create your first conversation to get started</p>
+          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+            <div className="mx-auto w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+              <MessageSquare size={32} className="text-gray-300" />
+            </div>
+            <h3 className="text-2xl font-serif font-semibold text-gray-600">No conversations found</h3>
+            <p className="text-gray-500 mt-2 mb-6">Create your first conversation to get started</p>
             <Button 
-              className="mt-4 w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue"
+              className="bg-brainai-electric-blue hover:bg-brainai-soft-blue shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1 transition-all"
               onClick={() => {
                 resetForm();
                 setIsFormOpen(true);

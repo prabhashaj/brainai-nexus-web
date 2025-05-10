@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Calendar, Plus, Trash2, Clock, MapPin } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -149,13 +149,13 @@ const EventsPage = () => {
   const getStatusColor = (status: EventStatus) => {
     switch (status) {
       case "upcoming":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-50 text-blue-600 border border-blue-200";
       case "ongoing":
-        return "bg-green-100 text-green-800";
+        return "bg-green-50 text-green-600 border border-green-200";
       case "completed":
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-50 text-gray-600 border border-gray-200";
       default:
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-50 text-blue-600 border border-blue-200";
     }
   };
 
@@ -171,16 +171,16 @@ const EventsPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-6 animate-fade-in-up">
+      <div className="p-4 md:p-6 lg:p-8 animate-fade-in-up">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Events</h1>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-1">Events</h1>
             <p className="text-gray-600">Manage your upcoming and past events</p>
           </div>
           
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="mt-4 md:mt-0 bg-brainai-electric-blue hover:bg-brainai-electric-blue/90">
+              <Button className="mt-4 md:mt-0 bg-brainai-electric-blue hover:bg-brainai-electric-blue/90 shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1 transition-all">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Event
               </Button>
@@ -264,13 +264,15 @@ const EventsPage = () => {
         </div>
 
         {events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg border border-gray-100">
-            <Calendar className="h-16 w-16 text-gray-400 mb-4" />
-            <h2 className="text-xl font-medium text-gray-600 mb-2">No events yet</h2>
+          <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+              <Calendar className="h-10 w-10 text-gray-300" />
+            </div>
+            <h2 className="text-2xl font-serif font-medium text-gray-600 mb-2">No events yet</h2>
             <p className="text-gray-500 mb-6">Create your first event to get started</p>
             <Button 
               onClick={() => setOpen(true)}
-              className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90"
+              className="bg-brainai-electric-blue hover:bg-brainai-electric-blue/90 shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1 transition-all"
             >
               <Plus className="mr-2 h-4 w-4" />
               Create Event
@@ -279,47 +281,56 @@ const EventsPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => (
-              <Card key={event.id} className="overflow-hidden transition-shadow hover:shadow-lg border border-gray-200">
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="text-lg font-semibold line-clamp-2">{event.title}</CardTitle>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 text-gray-500 hover:text-red-500"
-                      onClick={() => handleDeleteEvent(event.id)}
-                    >
-                      <Trash2 className="h-5 w-5" />
-                    </Button>
+              <div 
+                key={event.id}
+                className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.12)]"
+              >
+                <div className="absolute top-0 right-0 p-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 text-gray-500 hover:text-red-500 hover:bg-red-50"
+                    onClick={() => handleDeleteEvent(event.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-serif font-semibold line-clamp-2 pr-6">{event.title}</h3>
                   </div>
-                  <div className="mt-2">
-                    <Badge className={getStatusColor(event.status)}>
-                      {event.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
+                  
+                  <Badge className={`mb-4 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
+                    {event.status}
+                  </Badge>
+                  
                   {event.description && (
-                    <p className="text-sm text-gray-500 mb-4 line-clamp-3">{event.description}</p>
+                    <p className="text-gray-600 mb-5 line-clamp-2">{event.description}</p>
                   )}
-                  <div className="flex items-center text-sm text-gray-500 mb-2">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    {event.date && format(new Date(event.date), 'MMM dd, yyyy')}
+                  
+                  <div className="space-y-3 border-t border-gray-100 pt-4 mt-auto">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Calendar className="h-4 w-4 mr-2 text-brainai-electric-blue opacity-80" />
+                      {event.date && format(new Date(event.date), 'EEEE, MMMM d, yyyy')}
+                    </div>
+                    
+                    {event.time && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Clock className="h-4 w-4 mr-2 text-brainai-electric-blue opacity-80" />
+                        {event.time}
+                      </div>
+                    )}
+                    
+                    {event.location && (
+                      <div className="flex items-start text-sm text-gray-600">
+                        <MapPin className="h-4 w-4 mr-2 mt-0.5 text-brainai-electric-blue opacity-80" />
+                        <span className="flex-1">{event.location}</span>
+                      </div>
+                    )}
                   </div>
-                  {event.time && (
-                    <div className="flex items-center text-sm text-gray-500 mb-2">
-                      <Clock className="h-4 w-4 mr-2" />
-                      {event.time}
-                    </div>
-                  )}
-                  {event.location && (
-                    <div className="flex items-center text-sm text-gray-500">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      {event.location}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         )}

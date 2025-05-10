@@ -74,7 +74,7 @@ const Notes = () => {
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.Event) => {
     e.preventDefault();
     
     if (!currentNote.title.trim()) {
@@ -217,29 +217,44 @@ const Notes = () => {
     return matchesSearch && matchesTags;
   });
 
+  const getTagColor = (tag: string) => {
+    const colors = [
+      'bg-amber-100 text-amber-800',
+      'bg-blue-100 text-blue-800',
+      'bg-green-100 text-green-800',
+      'bg-purple-100 text-purple-800',
+      'bg-rose-100 text-rose-800',
+      'bg-teal-100 text-teal-800',
+    ];
+    
+    // Generate consistent color based on tag string
+    const index = tag.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+    return colors[index];
+  };
+
   return (
     <DashboardLayout>
       <div className="animate-fade-in-up px-4 md:px-8 lg:px-12 mt-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <h1 className="text-4xl font-extrabold text-gray-900">Notes</h1>
+          <h1 className="text-4xl font-serif font-extrabold text-gray-900">Notes</h1>
           <Button 
             onClick={() => {
               resetForm();
               setIsFormOpen(true);
             }}
-            className="w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all px-6 py-3 text-lg"
+            className="w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue transition-all px-6 py-3 text-lg shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1"
           >
             <Plus size={20} className="mr-2" />
             New Note
           </Button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] p-4 sm:p-6 mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4 md:gap-6">
             <div className="flex-1 relative">
               <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <Input
-                className="pl-12 py-3 text-lg bg-white text-gray-900"
+                className="pl-12 py-3 text-lg bg-white text-gray-900 border-gray-200 rounded-xl focus:border-brainai-electric-blue focus:ring-brainai-electric-blue/20"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -248,7 +263,7 @@ const Notes = () => {
             <div className="relative w-full md:w-auto">
               <Button 
                 variant="outline" 
-                className="w-full md:w-auto px-6 py-3 text-lg" 
+                className="w-full md:w-auto px-6 py-3 text-lg rounded-xl border-gray-200 hover:border-brainai-electric-blue hover:bg-brainai-electric-blue/5" 
                 onClick={() => setShowTagsDropdown(!showTagsDropdown)}
               >
                 <Tag size={20} className="mr-2" />
@@ -320,59 +335,75 @@ const Notes = () => {
             <div className="animate-spin h-10 w-10 border-4 border-brainai-electric-blue border-t-transparent rounded-full"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filteredNotes.length > 0 ? (
               filteredNotes.map((note) => (
-                <Card key={note.id} className="overflow-hidden border-none shadow-md hover:shadow-lg transition-all">
-                  <div className="p-4 sm:p-6">
-                    <h3 className="text-xl font-semibold mb-3 text-gray-800">{note.title}</h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3 text-base sm:text-lg">{note.content}</p>
-                    {note.tags && note.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {note.tags.map((tag, index) => (
-                          <span 
-                            key={index} 
-                            className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600 cursor-pointer hover:bg-brainai-electric-blue hover:text-white transition-colors"
-                            onClick={() => handleTagFilter(tag)}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div className="text-sm text-gray-500">
-                        Updated {new Date(note.updated_at).toLocaleDateString()}
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          className="h-8 w-8 p-0" 
-                          onClick={() => handleEdit(note)}
+                <div 
+                  key={note.id} 
+                  className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-100 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-brainai-electric-blue to-brainai-neon-purple opacity-80"></div>
+                  
+                  <h3 className="text-xl font-serif font-bold mb-3 text-gray-800 line-clamp-2 pl-3">{note.title}</h3>
+                  
+                  <p className="text-gray-600 mb-4 line-clamp-3 text-base pl-3 leading-relaxed">{note.content}</p>
+                  
+                  {note.tags && note.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4 pl-3">
+                      {note.tags.slice(0, 3).map((tag, index) => (
+                        <span 
+                          key={index} 
+                          className={`px-3 py-1 rounded-full text-sm cursor-pointer transition-colors ${getTagColor(tag)}`}
+                          onClick={() => handleTagFilter(tag)}
                         >
-                          <Pencil size={16} />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50" 
-                          onClick={() => handleDelete(note.id)}
-                        >
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
+                          {tag}
+                        </span>
+                      ))}
+                      {note.tags.length > 3 && (
+                        <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-600">
+                          +{note.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between mt-4 pl-3">
+                    <div className="text-sm text-gray-500 font-medium">
+                      {new Date(note.updated_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="h-8 w-8 p-0 rounded-full bg-gray-100/80 hover:bg-gray-200/80" 
+                        onClick={() => handleEdit(note)}
+                      >
+                        <Pencil size={14} />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="h-8 w-8 p-0 rounded-full bg-gray-100/80 hover:bg-red-100 text-gray-600 hover:text-red-600" 
+                        onClick={() => handleDelete(note.id)}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
                     </div>
                   </div>
-                </Card>
+                </div>
               ))
             ) : (
               <div className="col-span-full text-center py-16">
-                <Brain size={56} className="mx-auto text-gray-300 mb-6" />
-                <h3 className="text-2xl font-semibold text-gray-600">No notes found</h3>
+                <div className="mx-auto w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                  <Brain size={32} className="text-gray-300" />
+                </div>
+                <h3 className="text-2xl font-serif font-semibold text-gray-600">No notes found</h3>
                 <p className="text-gray-500 mt-3 text-lg">Create your first note to get started</p>
                 <Button 
-                  className="mt-6 w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue px-6 py-3 text-lg"
+                  className="mt-6 w-full sm:w-auto bg-brainai-electric-blue hover:bg-brainai-soft-blue px-6 py-3 text-lg shadow-[0_4px_14px_rgba(0,118,255,0.39)] hover:shadow-[0_6px_20px_rgba(0,118,255,0.23)] hover:-translate-y-1 transition-all"
                   onClick={() => {
                     resetForm();
                     setIsFormOpen(true);
