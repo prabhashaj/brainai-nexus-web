@@ -6,6 +6,8 @@ import HowItWorks from '@/components/HowItWorks';
 import FeaturesGrid from '@/components/FeaturesGrid';
 import Footer from '@/components/Footer';
 import Logo from '@/components/Logo';
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   return (
@@ -24,6 +26,13 @@ const Index = () => {
           <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
             Join thousands of users who trust BrainAi to help them remember what matters.
           </p>
+          <Link to="/auth" className="inline-block">
+            <Button 
+              className="bg-white text-brainai-charcoal hover:bg-white/90 px-6 py-5 rounded-full shadow-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(255,255,255,0.4)] font-medium backdrop-blur-sm border border-white/20"
+            >
+              Get Started
+            </Button>
+          </Link>
         </div>
       </div>
       <Footer />

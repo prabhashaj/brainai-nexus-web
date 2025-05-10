@@ -50,8 +50,7 @@ const HeroSection = () => {
         >
           <Link to="/auth">
             <Button 
-              variant="luxury"
-              className="px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-hover"
+              className="bg-white text-brainai-charcoal hover:bg-white/90 px-8 py-6 text-lg rounded-full shadow-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(255,255,255,0.4)] font-medium backdrop-blur-sm border border-white/20"
             >
               Get started for free
             </Button>

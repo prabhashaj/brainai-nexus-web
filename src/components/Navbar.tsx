@@ -55,7 +55,7 @@ const Navbar = () => {
         <div className="hidden md:block">
           <Link to="/auth">
             <Button 
-              className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm rounded-full border border-white/20 shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(255,255,255,0.2)]"
+              className="bg-white text-brainai-charcoal hover:bg-white/90 rounded-full border border-white/20 shadow-lg transition-all duration-300 hover:shadow-[0_5px_15px_rgba(255,255,255,0.3)] font-medium"
             >
               Get Started
             </Button>
@@ -87,8 +87,7 @@ const Navbar = () => {
             ))}
             <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
               <Button 
-                variant="luxury"
-                className="w-full rounded-full"
+                className="w-full bg-white text-brainai-charcoal hover:bg-white/90 rounded-full border border-white/20 shadow-lg"
               >
                 Get Started
               </Button>
