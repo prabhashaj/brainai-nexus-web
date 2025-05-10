@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Link } from "react-router-dom";
@@ -49,7 +50,8 @@ const HeroSection = () => {
         >
           <Link to="/auth">
             <Button 
-              className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(30,174,219,0.3)]"
+              variant="luxury"
+              className="px-8 py-6 text-lg rounded-full shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-hover"
             >
               Get started for free
             </Button>

@@ -22,6 +22,7 @@ export default {
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
 				display: ['Playfair Display', 'serif'],
+				heading: ['Gotham', 'Inter', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -68,13 +69,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				brainai: {
-					'charcoal': '#1A1F2C',
-					'dark-purple': '#221F26',
+					'charcoal': '#0A0E17',
+					'dark-purple': '#12101A',
 					'electric-blue': '#1EAEDB',
 					'soft-blue': '#0FA0CE',
 					'neon-purple': '#8B5CF6',
 					'magenta': '#D946EF',
 					'soft-cyan': '#33C3F0',
+					'gold': '#D4AF37',
+					'silver': '#C0C0C0',
+					'luxury-dark': '#0A0A0A',
+					'luxury-gray': '#1E1E1E',
 				}
 			},
 			borderRadius: {
@@ -125,9 +130,10 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-				'hero-gradient': 'linear-gradient(135deg, #1A1F2C 0%, #272246 100%)',
+				'hero-gradient': 'linear-gradient(135deg, #0A0E17 0%, #12101A 100%)',
 				'glass-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)',
 				'button-gradient': 'linear-gradient(90deg, rgba(30,174,219,1) 0%, rgba(139,92,246,1) 100%)',
+				'luxury-card': 'linear-gradient(145deg, #1E1E1E 0%, #0A0A0A 100%)',
 			},
 		}
 	},

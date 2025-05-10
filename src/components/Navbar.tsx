@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
+import Logo from './Logo';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,10 +36,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-r from-brainai-electric-blue to-brainai-neon-purple shadow-[0_0_15px_rgba(30,174,219,0.5)]"></div>
-          <span className="font-bold text-lg tracking-tight">BrainAi</span>
-        </a>
+        <Logo variant="dark" size="md" withText={true} />
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-8">
@@ -89,7 +87,8 @@ const Navbar = () => {
             ))}
             <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
               <Button 
-                className="bg-white/10 hover:bg-white/20 text-white w-full rounded-full border border-white/20 backdrop-blur-sm"
+                variant="luxury"
+                className="w-full rounded-full"
               >
                 Get Started
               </Button>
