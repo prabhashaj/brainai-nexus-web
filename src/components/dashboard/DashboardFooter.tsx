@@ -23,7 +23,7 @@ const DashboardFooter = () => {
       href: "/events",
     },
     {
-      title: "Conversations",
+      title: "Convos",
       icon: <MessageSquare className="h-6 w-6" />,
       href: "/conversations",
     },
