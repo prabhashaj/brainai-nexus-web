@@ -62,11 +62,7 @@ export const updateNote = async ({
 }) => {
   const { data, error } = await supabase
     .from('notes')
-    .update({ 
-      title, 
-      content, 
-      updated_at: new Date().toISOString() // Fixed: Convert Date to ISO string
-    })
+    .update({ title, content, updated_at: new Date() })
     .eq('id', id)
     .select()
     .single();
