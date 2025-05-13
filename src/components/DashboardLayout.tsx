@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Brain, 
@@ -18,6 +18,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -95,8 +96,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <h1 className="text-xl font-semibold text-gray-800">BrainAi</h1>
           </div>
         </header>
-        {/* Content Area - increased top margin for hero section */}
-        <main className="flex-1 overflow-x-hidden bg-gray-50 pb-20 lg:pb-0">
+        {/* Content Area */}
+        <main className="flex-1 overflow-x-hidden bg-gray-50">
           {children}
         </main>
       </div>
