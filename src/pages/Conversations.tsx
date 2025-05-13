@@ -28,7 +28,7 @@ const Conversations = () => {
     {
       id: '3',
       name: 'Memory Keeper',
-      lastMessage: 'I've saved your meeting highlights',
+      lastMessage: "I've saved your meeting highlights",
       time: '2 days ago',
       isAI: true
     },
