@@ -164,7 +164,6 @@ const Dashboard = () => {
     }
   };
 
-  // Create new note
   const handleCreateNote = async () => {
     try {
       if (!newNote.title) {

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -95,7 +96,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </div>
         </header>
         {/* Content Area - increased top margin for hero section */}
-        <main className="flex-1 overflow-x-hidden bg-gray-50">
+        <main className="flex-1 overflow-x-hidden bg-gray-50 pb-20 lg:pb-0">
           {children}
         </main>
       </div>
