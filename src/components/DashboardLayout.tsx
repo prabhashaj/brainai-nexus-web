@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import DashboardFooter from "@/components/dashboard/DashboardFooter";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -99,6 +100,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         <main className="flex-1 overflow-x-hidden bg-gray-50 pb-20 lg:pb-0">
           {children}
         </main>
+        {/* Adding back the footer for navigation */}
+        <DashboardFooter />
       </div>
     </div>
   );
