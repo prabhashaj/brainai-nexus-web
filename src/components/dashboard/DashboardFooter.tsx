@@ -41,7 +41,7 @@ const DashboardFooter = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center">
-              <Logo size={32} />
+              <Logo />
               <span className="ml-2 text-xl font-bold text-gray-800">BrainAi</span>
             </div>
             <div className="mt-4 md:mt-0">
