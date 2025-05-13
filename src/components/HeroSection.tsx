@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Link } from "react-router-dom";
@@ -63,11 +62,57 @@ const HeroSection = () => {
           <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-brainai-neon-purple rounded-full opacity-70 animate-float blur-lg" style={{ animationDelay: "1.5s" }}></div>
           
           <div className="glass shadow-2xl backdrop-blur-md rounded-3xl p-4 border border-white/10">
-            <img 
-              src={image} 
-              alt="BrainAi Interface" 
-              className="w-full h-auto rounded-2xl shadow-inner" 
-            />
+            <div
+              className="relative group"
+              style={{ perspective: '1200px' }}
+            >
+              <img
+                src={image}
+                alt="BrainAi Interface"
+                className="w-full h-auto rounded-2xl shadow-inner transition-transform duration-300 group-hover:scale-110 cursor-grab"
+                style={{ willChange: 'transform' }}
+                draggable={false}
+                onMouseDown={e => {
+                  const img = e.currentTarget;
+                  img.style.transition = 'none';
+                  img.style.cursor = 'grabbing';
+                  const rect = img.getBoundingClientRect();
+                  const startX = e.clientX;
+                  const startY = e.clientY;
+                  const origTransform = img.style.transform || '';
+                  let lastX = 0;
+                  let lastY = 0;
+                  const onMouseMove = (moveEvent: MouseEvent) => {
+                    const dx = moveEvent.clientX - startX;
+                    const dy = moveEvent.clientY - startY;
+                    lastX = dx;
+                    lastY = dy;
+                    img.style.transform = `${origTransform} translate(${dx}px, ${dy}px)`;
+                  };
+                  const onMouseUp = () => {
+                    img.style.transition = '';
+                    img.style.transform = origTransform;
+                    img.style.cursor = 'grab';
+                    window.removeEventListener('mousemove', onMouseMove);
+                    window.removeEventListener('mouseup', onMouseUp);
+                  };
+                  window.addEventListener('mousemove', onMouseMove);
+                  window.addEventListener('mouseup', onMouseUp);
+                }}
+                onMouseLeave={e => {
+                  const img = e.currentTarget;
+                  img.style.transition = '';
+                  img.style.transform = '';
+                  img.style.cursor = 'grab';
+                }}
+                onMouseUp={e => {
+                  const img = e.currentTarget;
+                  img.style.transition = '';
+                  img.style.transform = '';
+                  img.style.cursor = 'grab';
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
